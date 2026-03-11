@@ -4,34 +4,74 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
-    use HasFactory;
-
+    use HasFactory, SoftDeletes;
+    
     protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'sale_price',
-        'image',
-        'stock',
-        'category_id',
-        'featured'
+        'name', 'slug', 'short_description', 'description', 'video_link',
+        'sku', 'regular_price', 'sale_price', 'purchase_price',
+        'stock_quantity', 'manage_stock', 'in_stock', 'featured_image',
+        'product_type', 'specifications', 'additional_info', 'status'
     ];
 
-    public function category()
+    protected $casts = [
+        'specifications' => 'array',
+        'additional_info' => 'array',
+        'manage_stock' => 'boolean',
+        'in_stock' => 'boolean',
+        'status' => 'boolean',
+        'regular_price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
+        'purchase_price' => 'decimal:2'
+    ];
+
+    protected static function boot()
     {
-        return $this->belongsTo(Category::class);
+        parent::boot();
+        
+        static::creating(function ($product) {
+            if (empty($product->slug)) {
+                $product->slug = Str::slug($product->name);
+            }
+        });
     }
 
-    public function getFinalPriceAttribute()
+    public function images(): HasMany
     {
-        return $this->sale_price ?? $this->price;
+        return $this->hasMany(ProductImage::class)->orderBy('order');
     }
 
-    public function getHasSaleAttribute()
+    public function categories(): BelongsToMany
     {
-        return !is_null($this->sale_price);
+        return $this->belongsToMany(ProductCategory::class, 'category_product');
+    }
+
+    public function variations(): HasMany
+    {
+        return $this->hasMany(ProductVariation::class);
+    }
+
+    public function featuredProducts(): HasMany
+    {
+        return $this->hasMany(FeaturedProduct::class);
+    }
+
+    public function getDisplayPriceAttribute()
+    {
+        return $this->sale_price ?? $this->regular_price;
+    }
+
+    public function getDiscountPercentageAttribute()
+    {
+        if ($this->sale_price && $this->regular_price > 0) {
+            return round((($this->regular_price - $this->sale_price) / $this->regular_price) * 100);
+        }
+        return 0;
     }
 }

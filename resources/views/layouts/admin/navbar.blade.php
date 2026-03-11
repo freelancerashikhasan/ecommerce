@@ -836,14 +836,14 @@
                                 <div class="rounded hp-bg-black-0 hp-bg-dark-100 px-18 py-24">
                                     <span class="d-block h5 hp-text-color-black-100 hp-text-color-dark-0 mb-16">Profile Settings</span>
 
-                                    <a href="{{ route('password.change') }}" class="hp-p1-body fw-medium hp-hover-text-color-primary-2">View Profile</a>
+                                    <a href="{{ route('admin.password.change') }}" class="hp-p1-body fw-medium hp-hover-text-color-primary-2">View Profile</a>
 
                                     <div class="divider my-12"></div>
                                     <div class="row">
                                         <div class="col-12">
-                                            <a class="hp-p1-body fw-medium" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> {{ __('Logout') }}</a>
+                                            <a class="hp-p1-body fw-medium" href="{{ route('admin.logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();"> {{ __('Logout') }}</a>
                                         </div>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                        <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" class="d-none">
                                             @csrf
                                         </form>
                                     </div>

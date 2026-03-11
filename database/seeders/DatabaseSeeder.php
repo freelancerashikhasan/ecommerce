@@ -10,10 +10,10 @@ class DatabaseSeeder extends Seeder
     {
         // Create categories
          $this->call(AdminSeeder::class);
-        // $this->call(RoleSeeder::class);
-        // $this->call(PermissionSeeder::class);
-        // $this->call(RoleHasPermissionSeeder::class);
-        // $this->call(ModelHasRoleSeeder::class);
+        $this->call(RoleSeeder::class);
+        $this->call(PermissionSeeder::class);
+        $this->call(RoleHasPermissionSeeder::class);
+        $this->call(ModelHasRoleSeeder::class);
         $this->call(SiteSettingsSeeder::class);
         // $this->call(SiteKeywordSeeder::class);
     }

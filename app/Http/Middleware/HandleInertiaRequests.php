@@ -18,9 +18,9 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user('web'),
             ],
-            'cartCount' => $request->user() ? $request->user()->carts()->count() : 0,
+            'cartCount' => $request->user('web') ? $request->user('web')->carts()->count() : 0,
             'flash' => [
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),

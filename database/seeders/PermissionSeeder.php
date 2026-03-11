@@ -19,7 +19,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'access-all',
                     'group' => 'Main',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -27,7 +27,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'settings',
                     'group' => 'Main',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -35,7 +35,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense_category-visibility',
                     'group' => 'Expense Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -43,7 +43,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense_category-create',
                     'group' => 'Expense Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -51,7 +51,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense_category-edit',
                     'group' => 'Expense Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -59,7 +59,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense_category-view',
                     'group' => 'Expense Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -67,7 +67,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense_category-delete',
                     'group' => 'Expense Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -76,7 +76,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive_category-visibility',
                     'group' => 'Receive Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -84,7 +84,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive_category-create',
                     'group' => 'Receive Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -92,7 +92,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive_category-edit',
                     'group' => 'Receive Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -100,7 +100,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive_category-view',
                     'group' => 'Receive Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -108,7 +108,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive_category-delete',
                     'group' => 'Receive Category',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -116,7 +116,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'account-visibility',
                     'group' => 'Account',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -124,7 +124,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'account-create',
                     'group' => 'Account',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -132,7 +132,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'account-edit',
                     'group' => 'Account',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -140,7 +140,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'account-view',
                     'group' => 'Account',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -148,7 +148,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'account-delete',
                     'group' => 'Account',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -156,7 +156,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive-visibility',
                     'group' => 'Receive',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -164,7 +164,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive-create',
                     'group' => 'Receive',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -172,7 +172,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive-edit',
                     'group' => 'Receive',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -180,7 +180,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive-view',
                     'group' => 'Receive',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -188,7 +188,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'receive-delete',
                     'group' => 'Receive',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -196,7 +196,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense-visibility',
                     'group' => 'Expense',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -204,7 +204,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense-create',
                     'group' => 'Expense',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -212,7 +212,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense-edit',
                     'group' => 'Expense',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -220,7 +220,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense-view',
                     'group' => 'Expense',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -228,7 +228,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'expense-delete',
                     'group' => 'Expense',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -236,7 +236,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'ledger-visibility',
                     'group' => 'Ledger',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -244,7 +244,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'ledger-create',
                     'group' => 'Ledger',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -252,7 +252,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'ledger-edit',
                     'group' => 'Ledger',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -260,7 +260,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'ledger-view',
                     'group' => 'Ledger',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -268,7 +268,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'ledger-delete',
                     'group' => 'Ledger',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -276,7 +276,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'staff-visibility',
                     'group' => 'Staff',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -284,7 +284,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'staff-create',
                     'group' => 'Staff',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -292,7 +292,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'staff-edit',
                     'group' => 'Staff',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -300,7 +300,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'staff-view',
                     'group' => 'Staff',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -308,7 +308,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'staff-delete',
                     'group' => 'Staff',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -316,7 +316,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'roles-visibility',
                     'group' => 'Roles',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -324,7 +324,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'roles-create',
                     'group' => 'Roles',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -332,7 +332,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'roles-edit',
                     'group' => 'Roles',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -340,7 +340,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'roles-view',
                     'group' => 'Roles',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -348,7 +348,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'roles-delete',
                     'group' => 'Roles',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -356,7 +356,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'site_settings-visibility',
                     'group' => 'Site Settings',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -364,7 +364,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'site_settings-create',
                     'group' => 'Site Settings',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -372,7 +372,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'site_settings-edit',
                     'group' => 'Site Settings',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -380,7 +380,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'site_settings-view',
                     'group' => 'Site Settings',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -388,7 +388,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'site_settings-delete',
                     'group' => 'Site Settings',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -396,7 +396,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'member-visibility',
                     'group' => 'Member',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -404,7 +404,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'member-create',
                     'group' => 'Member',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -412,7 +412,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'member-edit',
                     'group' => 'Member',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -420,7 +420,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'member-view',
                     'group' => 'Member',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -428,7 +428,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'member-delete',
                     'group' => 'Member',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -436,7 +436,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'blog-visibility',
                     'group' => 'Blog',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -444,7 +444,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'blog-create',
                     'group' => 'Blog',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -452,7 +452,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'blog-edit',
                     'group' => 'Blog',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -460,7 +460,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'blog-view',
                     'group' => 'Blog',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -468,7 +468,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'blog-delete',
                     'group' => 'Blog',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -476,7 +476,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'gallary-visibility',
                     'group' => 'Gallary',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -484,7 +484,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'gallary-create',
                     'group' => 'Gallary',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -492,7 +492,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'gallary-edit',
                     'group' => 'Gallary',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -500,7 +500,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'gallary-view',
                     'group' => 'Gallary',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -508,7 +508,7 @@ class PermissionSeeder extends Seeder
                 [
                     'name' => 'gallary-delete',
                     'group' => 'Gallary',
-                    'guard_name' => 'web',
+                    'guard_name' => 'admin',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],

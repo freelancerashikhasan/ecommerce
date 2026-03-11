@@ -27,6 +27,11 @@ return Application::configure(basePath: dirname(__DIR__))
          $middleware->alias([
             'admin.auth' => \App\Http\Middleware\AuthenticateAdmin::class,
             'admin.guest' => \App\Http\Middleware\RedirectIfAdminAuthenticated::class,
+               'role' => \App\Http\Middleware\RoleMiddleware::class,
+                'permission' => \App\Http\Middleware\PermissionMiddleware::class,
+        'can' => \Illuminate\Auth\Middleware\Authorize::class,
+
+            'role_or_permission' => \App\Http\Middleware\RoleOrPermissionMiddleware::class,
         ]);
 
     })
