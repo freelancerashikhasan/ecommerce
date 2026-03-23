@@ -1,53 +1,86 @@
 <?php
+// app/Http/Controllers/ProductController.php
 
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\Category;
+use App\Models\ProductCategory;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function collections()
     {
-        $products = Product::with('category')
-            ->filter(request(['search', 'category']))
-            ->latest()
-            ->paginate(12)
-            ->withQueryString();
+        // Fetch all active categories with their products (limited to 6 per category)
+        $collections = ProductCategory::where('status', true)
+            ->with(['products' => function($query) {
+                $query->where('status', true)
+                    ->latest()
+                    ->limit(6);
+            }])
+            ->orderBy('order')
+            ->get()
+            ->map(function($category) {
+                return [
+                    'id' => $category->id,
+                    'title' => $category->name,
+                    'description' => $category->description ?? "Don't miss this opportunity at a special discount just for this week.",
+                    'products' => $category->products->map(function($product) {
+                        // Determine badge
+                        $badge = null;
+                        if ($product->sale_price) {
+                            $badge = 'Sale';
+                        } elseif ($product->created_at->gt(now()->subDays(7))) {
+                            $badge = 'New';
+                        }
 
-        $categories = Category::all();
+                        return [
+                            'id' => $product->id,
+                            'name' => $product->name,
+                            'slug' => $product->slug,
+                            'image' => $product->featured_image ? asset('storage/' . $product->featured_image) : null,
+                            'price' => $product->sale_price ?? $product->regular_price,
+                            'originalPrice' => $product->regular_price,
+                            'rating' => $product->average_rating ?? 4.0, // You'll need to implement this
+                            'badge' => $badge
+                        ];
+                    })
+                ];
+            });
 
-        return Inertia::render('Products/Index', [
-            'products' => $products,
-            'categories' => $categories,
-            'filters' => request()->only(['search', 'category'])
+        return Inertia::render('Home', [
+            'collections' => $collections
         ]);
     }
 
-    public function show(Product $product)
+    public function show($slug)
     {
-        $relatedProducts = Product::where('category_id', $product->category_id)
+        $product = Product::where('slug', $slug)
+            ->where('status', true)
+            ->with(['categories', 'images', 'variations'])
+            ->firstOrFail();
+
+        // Get related products from same categories
+        $categoryIds = $product->categories->pluck('id')->toArray();
+
+        $relatedProducts = Product::where('status', true)
             ->where('id', '!=', $product->id)
+            ->whereHas('categories', function($query) use ($categoryIds) {
+                $query->whereIn('product_categories.id', $categoryIds);
+            })
             ->limit(4)
             ->get();
 
-        return Inertia::render('Products/ProductDetail', [
-            'product' => $product->load('category'),
-            'relatedProducts' => $relatedProducts
+        return Inertia::render('Products/Show', [
+            'product' => array_merge($product->toArray(), [
+                'featured_image' => $product->featured_image,
+                'images' => $product->images,
+                'categories' => $product->categories,
+                'related_products' => $relatedProducts,
+                'average_rating' => 4.5, // You'll need to implement actual rating
+                'reviews_count' => 12 // You'll need to implement actual count
+            ])
         ]);
     }
-
-    public function featured()
-    {
-        $products = Product::with('category')
-            ->where('featured', true)
-            ->limit(8)
-            ->get();
-
-        return Inertia::render('Home', [
-            'featuredProducts' => $products
-        ]);
-    }
- 
 }

@@ -21,7 +21,7 @@ export const CartProvider = ({ children }) => {
             return [];
         }
     });
-    
+
     const [showCartModal, setShowCartModal] = useState(() => {
         try {
             const savedModalState = localStorage.getItem('cartModal');
@@ -30,7 +30,7 @@ export const CartProvider = ({ children }) => {
             return false;
         }
     });
-    
+
     const [lastAddedItem, setLastAddedItem] = useState(() => {
         try {
             const savedLastItem = localStorage.getItem('lastAddedItem');
@@ -74,7 +74,7 @@ export const CartProvider = ({ children }) => {
     const addToCart = (product, quantity = 1) => {
         setCartItems(prevItems => {
             const existingItem = prevItems.find(item => item.id === product.id);
-            
+
             if (existingItem) {
                 // Update quantity if item exists
                 const updatedItems = prevItems.map(item =>
@@ -82,14 +82,15 @@ export const CartProvider = ({ children }) => {
                         ? { ...item, quantity: item.quantity + quantity }
                         : item
                 );
-                
+
                 // Update last added item
                 const updatedItem = updatedItems.find(item => item.id === product.id);
                 setLastAddedItem(updatedItem);
                 setShowCartModal(true);
-                
+
                 return updatedItems;
             } else {
+                console.log(product);
                 // Add new item
                 const newItem = {
                     id: product.id,
@@ -99,7 +100,7 @@ export const CartProvider = ({ children }) => {
                     quantity: quantity,
                     maxQuantity: product.stock_quantity || 10
                 };
-                
+
                 setLastAddedItem(newItem);
                 setShowCartModal(true);
                 return [...prevItems, newItem];
@@ -110,12 +111,12 @@ export const CartProvider = ({ children }) => {
     const removeFromCart = (productId) => {
         setCartItems(prevItems => {
             const filteredItems = prevItems.filter(item => item.id !== productId);
-            
+
             // Update lastAddedItem if we're removing the last added item
             if (lastAddedItem && lastAddedItem.id === productId) {
                 setLastAddedItem(null);
             }
-            
+
             return filteredItems;
         });
     };
@@ -132,13 +133,13 @@ export const CartProvider = ({ children }) => {
                     ? { ...item, quantity: newQuantity }
                     : item
             );
-            
+
             // Update lastAddedItem if it's the one being updated
             if (lastAddedItem && lastAddedItem.id === productId) {
                 const updatedItem = updatedItems.find(item => item.id === productId);
                 setLastAddedItem(updatedItem);
             }
-            
+
             return updatedItems;
         });
     };

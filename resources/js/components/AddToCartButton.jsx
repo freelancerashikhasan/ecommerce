@@ -8,7 +8,7 @@ export default function AddToCartButton({ product, className = '', children }) {
     const handleAddToCart = (e) => {
         e.preventDefault();
         setIsAdding(true);
-        
+
         // Simulate async operation
         setTimeout(() => {
             addToCart(product, 1);
@@ -17,9 +17,10 @@ export default function AddToCartButton({ product, className = '', children }) {
     };
 
     return (
-        <button 
+        <button
             onClick={handleAddToCart}
             className={`cartbtn ${className} ${isAdding ? 'adding' : ''}`}
+            style={{ gap:'50px' }}
             disabled={isAdding}
         >
             {isAdding ? (

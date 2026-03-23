@@ -3,9 +3,9 @@ import { useCart } from '../contexts/CartContext';
 import { Link, useForm } from '@inertiajs/react';
 
 export default function CartModal() {
-    const { 
-        showCartModal, 
-        setShowCartModal, 
+    const {
+        showCartModal,
+        setShowCartModal,
         cartItems,
         getCartCount,
         getCartTotal,
@@ -13,7 +13,7 @@ export default function CartModal() {
         updateQuantity,
         clearCart
     } = useCart();
-    
+
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
@@ -27,7 +27,7 @@ export default function CartModal() {
 
     const handleCheckout = (e) => {
         e.preventDefault();
-        
+
         // Prepare order data with cart items
         const orderData = {
             ...data,
@@ -60,7 +60,7 @@ export default function CartModal() {
     const FloatingInput = ({ type = "text", name, label, value, onChange, error, required = false, rows }) => {
         const [focused, setFocused] = useState(false);
         const hasValue = value && value.length > 0;
-        
+
         if (type === "textarea") {
             return (
                 <div className="floating-input-group mb-4">
@@ -105,24 +105,24 @@ export default function CartModal() {
     return (
         <>
             {/* Modal Backdrop */}
-            <div 
-                className="modal-backdrop fade show" 
+            <div
+                className="modal-backdrop fade show"
                 style={{ zIndex: 1040 }}
                 onClick={() => {
                     setShowCartModal(false);
                 }}
             />
-            
+
             {/* Modal */}
-            <div 
-                className="modal fade show" 
+            <div
+                className="modal fade show"
                 style={{ display: 'block', zIndex: 1050 }}
                 tabIndex="-1"
             >
                 <div className="modal-dialog modal-dialog-centered modal-lg">
                     <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
                         {/* Modal Header with Gradient */}
-                        <div className="modal-header border-0" style={{ 
+                        <div className="modal-header border-0" style={{
                             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                             padding: '1.5rem 2rem'
                         }}>
@@ -135,15 +135,15 @@ export default function CartModal() {
                                     </span>
                                 )}
                             </h5>
-                            <button 
-                                type="button" 
-                                className="btn-close btn-close-white" 
+                            <button
+                                type="button"
+                                className="btn-close btn-close-white"
                                 onClick={() => {
                                     setShowCartModal(false);
                                 }}
                             />
                         </div>
-                        
+
                         <div className="modal-body p-4" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                             {cartItems.length === 0 ? (
                                 <div className="text-center py-5">
@@ -152,7 +152,7 @@ export default function CartModal() {
                                     </div>
                                     <h5 className="text-muted mb-3">Your cart is empty</h5>
                                     <p className="text-muted mb-4">Looks like you haven't added anything to your cart yet</p>
-                                    <button 
+                                    <button
                                         className="btn btn-primary px-4 py-2 rounded-pill"
                                         style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}
                                         onClick={() => setShowCartModal(false)}
@@ -168,14 +168,14 @@ export default function CartModal() {
                                             <i className="fas fa-shopping-cart me-2"></i>
                                             Your Items
                                         </h6>
-                                        
+
                                         {/* Cart Items List */}
                                         <div className="cart-items" style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '10px' }}>
                                             {cartItems.map((item, index) => (
-                                                <div 
-                                                    key={item.id} 
+                                                <div
+                                                    key={item.id}
                                                     className="cart-item-card mb-3 p-3"
-                                                    style={{ 
+                                                    style={{
                                                         background: '#f8f9fa',
                                                         borderRadius: '15px',
                                                         border: '1px solid #e9ecef',
@@ -184,19 +184,19 @@ export default function CartModal() {
                                                 >
                                                     <div className="d-flex">
                                                         <div className="item-image me-3" style={{ position: 'relative' }}>
-                                                            <img 
-                                                                src={item.image || 'https://via.placeholder.com/60'} 
+                                                            <img
+                                                                src={item.image || 'https://via.placeholder.com/60'}
                                                                 alt={item.name}
-                                                                style={{ 
-                                                                    width: '60px', 
-                                                                    height: '60px', 
+                                                                style={{
+                                                                    width: '60px',
+                                                                    height: '60px',
                                                                     objectFit: 'cover',
                                                                     borderRadius: '10px',
                                                                     boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
                                                                 }}
                                                             />
                                                         </div>
-                                                        
+
                                                         <div className="flex-grow-1">
                                                             <div className="d-flex justify-content-between align-items-start">
                                                                 <h6 className="fw-bold mb-1" style={{ fontSize: '0.95rem' }}>{item.name}</h6>
@@ -208,12 +208,12 @@ export default function CartModal() {
                                                                     <i className="fas fa-times"></i>
                                                                 </button>
                                                             </div>
-                                                            
+
                                                             <div className="d-flex justify-content-between align-items-center mt-2">
                                                                 <span className="text-primary fw-bold">
-                                                                    ${item.price.toFixed(2)}
+                                                                    ${item.price}
                                                                 </span>
-                                                                
+
                                                                 <div className="quantity-control d-flex align-items-center">
                                                                     <button
                                                                         onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
@@ -231,7 +231,7 @@ export default function CartModal() {
                                                                         <i className="fas fa-plus"></i>
                                                                     </button>
                                                                 </div>
-                                                                
+
                                                                 <span className="fw-bold text-primary" style={{ fontSize: '0.95rem' }}>
                                                                     ${(item.price * item.quantity).toFixed(2)}
                                                                 </span>
@@ -241,9 +241,9 @@ export default function CartModal() {
                                                 </div>
                                             ))}
                                         </div>
-                                        
+
                                         {/* Mini Cart Summary */}
-                                        <div className="mt-3 p-3" style={{ 
+                                        <div className="mt-3 p-3" style={{
                                             background: 'linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%)',
                                             borderRadius: '12px'
                                         }}>
@@ -262,7 +262,7 @@ export default function CartModal() {
                                             <hr className="my-2" />
                                             <div className="d-flex justify-content-between">
                                                 <span className="fw-bold">Total:</span>
-                                                <span className="h6 fw-bold" style={{ 
+                                                <span className="h6 fw-bold" style={{
                                                     color: '#667eea'
                                                 }}>
                                                     ${(getCartTotal() * 1.1).toFixed(2)}
@@ -270,14 +270,14 @@ export default function CartModal() {
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     {/* Right Column - Checkout Form */}
                                     <div className="col-lg-7">
                                         <h6 className="fw-bold mb-3" style={{ color: '#667eea' }}>
                                             <i className="fas fa-user me-2"></i>
                                             Guest Checkout
                                         </h6>
-                                        
+
                                         <form onSubmit={handleCheckout}>
                                             <div className="row">
                                                 <div className="col-md-6">
@@ -303,7 +303,7 @@ export default function CartModal() {
                                                     />
                                                 </div>
                                             </div>
-                                            
+
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <FloatingInput
@@ -328,7 +328,7 @@ export default function CartModal() {
                                                     />
                                                 </div>
                                             </div>
-                                            
+
                                             <FloatingInput
                                                 type="text"
                                                 name="address"
@@ -338,7 +338,7 @@ export default function CartModal() {
                                                 error={errors.address}
                                                 required
                                             />
-                                            
+
                                             <div className="row">
                                                 <div className="col-md-6">
                                                     <FloatingInput
@@ -363,7 +363,7 @@ export default function CartModal() {
                                                     />
                                                 </div>
                                             </div>
-                                            
+
                                             <FloatingInput
                                                 type="textarea"
                                                 name="notes"
@@ -372,12 +372,12 @@ export default function CartModal() {
                                                 onChange={e => setData('notes', e.target.value)}
                                                 rows="2"
                                             />
-                                            
+
                                             <button
                                                 type="submit"
                                                 className="btn btn-success w-100 py-3 rounded-pill mt-3"
                                                 disabled={processing}
-                                                style={{ 
+                                                style={{
                                                     background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
                                                     border: 'none',
                                                     fontSize: '1.1rem',
@@ -396,7 +396,7 @@ export default function CartModal() {
                                                     </>
                                                 )}
                                             </button>
-                                            
+
                                             <p className="text-center text-muted small mt-3">
                                                 <i className="fas fa-shield-alt me-1"></i>
                                                 Your information is secure and encrypted
@@ -406,11 +406,11 @@ export default function CartModal() {
                                 </div>
                             )}
                         </div>
-                        
+
                         {/* Modal Footer */}
                         <div className="modal-footer border-0 p-3" style={{ background: '#f8f9fa' }}>
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 className="btn btn-outline-secondary rounded-pill px-4"
                                 onClick={() => setShowCartModal(false)}
                                 style={{ borderWidth: '2px' }}
@@ -419,8 +419,8 @@ export default function CartModal() {
                                 Close
                             </button>
                             {cartItems.length > 0 && (
-                                <Link 
-                                    href="/cart" 
+                                <Link
+                                    href="/cart"
                                     className="btn btn-outline-primary rounded-pill px-4"
                                     onClick={() => setShowCartModal(false)}
                                     style={{ borderWidth: '2px' }}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, usePage } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
+import MainLayout from '../../layouts/MainLayout';
 
 export default function ProductsIndex({ products, categories, filters }) {
     const { props } = usePage();
@@ -8,7 +8,7 @@ export default function ProductsIndex({ products, categories, filters }) {
     const [selectedCategory, setSelectedCategory] = useState(filters.category || '');
 
     return (
-        <AppLayout>
+        <MainLayout>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Header */}
                 <div className="mb-8">
@@ -131,6 +131,6 @@ export default function ProductsIndex({ products, categories, filters }) {
                     </div>
                 )}
             </div>
-        </AppLayout>
+        </MainLayout>
     );
 }

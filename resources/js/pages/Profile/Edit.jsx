@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm, usePage } from '@inertiajs/react';
-import AppLayout from '../../layouts/AppLayout';
+import MainLayout from '../../layouts/MainLayout';
 
 export default function ProfileEdit() {
     const { auth } = usePage().props;
@@ -15,7 +15,7 @@ export default function ProfileEdit() {
     };
 
     return (
-        <AppLayout>
+        <MainLayout>
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 <div className="bg-white shadow rounded-lg">
                     <div className="px-4 py-5 sm:p-6">
@@ -91,6 +91,6 @@ export default function ProfileEdit() {
                     </div>
                 </div>
             </div>
-        </AppLayout>
+        </MainLayout>
     );
 }

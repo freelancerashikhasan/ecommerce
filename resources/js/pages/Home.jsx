@@ -4,7 +4,7 @@ import CardSection from './../components/CardSection';
 import ProductCollections from '../components/ProductCollections';
 import MainLayout from '../Layout/MainLayout';
 
-export default function Home() {
+export default function Home({ collections }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const slides = [
         {
@@ -106,7 +106,7 @@ export default function Home() {
                 <CardSection />
             </div>
             <div className="product-collection-section">
-                <ProductCollections />
+                <ProductCollections  collections={collections}/>
             </div>
         </MainLayout>
     );
