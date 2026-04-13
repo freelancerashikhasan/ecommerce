@@ -1,10 +1,4 @@
 
-.topHeader{
-    background-color: #634C9F;
-    width: 100%;
-    height: 40px;
-    height: auto;
-}
 .topHeaderText1{
     color: #FFF;
     text-align: center;
@@ -15,6 +9,13 @@
     line-height: normal;
     letter-spacing: -0.32px;
     padding: 12px 0px 10px;
+}
+.topHeader{
+  background-color: #112066;
+}
+.defaultColor{
+  background-color: #112066;
+  color: #fff;
 }
 .topHeaderText2{
     color: #D0C9E2;
@@ -73,9 +74,7 @@
 .header-logo{
     width: 160px;
 }
-.search-section {
-    padding: 15px 0;
-}
+
 
 .header-container {
     display: flex;
@@ -215,14 +214,14 @@
   font-weight: bold;
 }
 .nav-link.active {
-    color: #634C9F;
+    color: #112066;
     font-family: Inter;
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
     line-height: 48px;
     letter-spacing: -0.3px;
-    border-bottom: 2px solid #634C9F;
+    border-bottom: 2px solid #112066;
 }
 .nav-link {
     color: #030712;
@@ -322,7 +321,7 @@
   gap: 5.697px;
   flex-shrink: 0;
   border-radius: 8px;
-  background: #634C9F;
+  background: #112066;
   text-decoration: none;
   color: #FFF;
   text-align: center;
@@ -425,7 +424,7 @@
 }
 
 .dot.active {
-  background: #634C9F;
+  background: #112066;
   transform: scale(1.2);
 }
 
@@ -512,7 +511,6 @@
   width: 56px;
   height: 57px;
   flex-shrink: 0;
-  margin: 20px;
 }
 .feature-card h5{
   color: #030712;
@@ -532,11 +530,11 @@
   line-height: 18.21px; /* 140.077% */
   letter-spacing: -0.32px;
 }
-.featureProduct{
+/* .featureProduct{
   margin-top: 50px;
-}
+} */
 .feature-product-section{
-  height: 300px;
+  /* height: 300px; */
 }
 .featureProduct{
   padding: 20px;
@@ -583,10 +581,10 @@
   gap: 5.624px;
   flex-shrink: 0;
   border-radius: 999px;
-  border: 1px solid #E5E7EB;
-  background: #FFF;
+  border: none !important;
+  background: #112066;
   text-decoration: none;
-  color: #212529;
+  color: #ffffff;
   text-align: center;
   font-family: Inter;
   
@@ -694,15 +692,16 @@
   gap: 80px;
   flex-shrink: 0;
   border-radius: 999px;
-  border: 1px solid #634C9F;
+  border: 1px solid #112066;
   text-decoration: none;
-  color: #634C9F;
-  font-family: Inter;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  letter-spacing: -0.26px;
-  width: 100%;
+  color: #ffffff;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: -0.26px;
+    width: 100%;
+    background-color: #112066;
 }
 .single-line-ellipsis {
   white-space: nowrap;
@@ -728,4 +727,204 @@
   text-transform: uppercase;
    position: absolute;
   
+}
+/* Add or update these styles in your main CSS file */
+
+/* Fix for slider on mobile - hide inactive slides properly */
+@media (max-width: 991px) {
+    .banner-section {
+        height: auto !important;
+        margin-bottom: 20px;
+        position: relative;
+    }
+
+    .slider-container {
+        position: relative !important;
+        width: 100%;
+        min-height: 350px;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    .slide {
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        pointer-events: none;
+        padding: 30px 20px;
+        display: flex;
+        align-items: center;
+    }
+
+    .slide.active {
+        opacity: 1 !important;
+        visibility: visible !important;
+        position: relative !important;
+        pointer-events: auto;
+        z-index: 1;
+    }
+
+    .slide.inactive {
+        opacity: 0 !important;
+        visibility: hidden !important;
+        position: absolute !important;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+    .slide-content {
+        max-width: 100%;
+        text-align: center;
+    }
+
+    .slide h2 {
+        font-size: 28px !important;
+        line-height: 36px !important;
+        letter-spacing: -0.5px !important;
+        margin-top: 0 !important;
+    }
+
+    .slide p {
+        font-size: 14px !important;
+        margin-bottom: 15px !important;
+    }
+
+    .banner-btn-sec {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px !important;
+    }
+
+    .banner-btn {
+        width: 160px;
+        height: 45px;
+        font-size: 14px;
+    }
+
+    .banner-btn-sec .ms-3 {
+        margin-left: 0 !important;
+        text-align: center;
+    }
+
+    .slider-dots {
+        position: absolute;
+        bottom: 2px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255, 255, 255, 0.9);
+        padding: 8px 12px;
+        border-radius: 20px;
+        gap: 8px;
+        z-index: 10;
+    }
+}
+
+/* Desktop styles remain unchanged */
+@media (min-width: 992px) {
+    .banner-section {
+        height: 400px;
+        position: relative;
+    }
+
+    .slider-container {
+        position: relative;
+        height: 400px;
+        width: 100%;
+        border-radius: 10px;
+    }
+
+    .slide {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        padding: 50px;
+        box-sizing: border-box;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    .slide.active {
+        opacity: 1;
+    }
+
+    .slide.inactive {
+        opacity: 0;
+    }
+}
+
+/* Tablet specific */
+@media (min-width: 768px) and (max-width: 991px) {
+    .slider-container {
+        min-height: 380px;
+    }
+
+    .slide {
+        min-height: 380px;
+        padding: 40px 30px;
+    }
+
+    .slide h2 {
+        font-size: 32px !important;
+        line-height: 42px !important;
+    }
+
+    .banner-btn-sec {
+        flex-direction: row !important;
+        justify-content: center;
+        gap: 20px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+    .slider-container {
+        min-height: 320px;
+    }
+
+    .slide {
+        min-height: 320px;
+        padding: 25px 15px;
+    }
+
+    .slide h2 {
+        font-size: 22px !important;
+        line-height: 30px !important;
+    }
+
+    .banner-btn {
+        width: 140px;
+        height: 42px;
+        font-size: 13px;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .slider-container {
+        min-height: 280px;
+    }
+
+    .slide {
+        min-height: 280px;
+        padding: 20px 12px;
+    }
+
+    .slide h2 {
+        font-size: 18px !important;
+        line-height: 24px !important;
+    }
 }

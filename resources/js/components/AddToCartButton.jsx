@@ -31,7 +31,7 @@ export default function AddToCartButton({ product, className = '', children }) {
             ) : (
                 children || (
                     <>
-                       Add to cart <i className='fas fa-arrow-right'></i>
+                       <span>Add to cart</span> <i className='fas fa-arrow-right'></i>
                     </>
                 )
             )}

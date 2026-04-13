@@ -12,6 +12,7 @@ class Admin extends Authenticatable
     use Notifiable,HasRoles, SoftDeletes;
 
     protected $guard_name = 'admin'; 
+    protected $guard = 'admin'; 
 
     protected $fillable = [
         'name',

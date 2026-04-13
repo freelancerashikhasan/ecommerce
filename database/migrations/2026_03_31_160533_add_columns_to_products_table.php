@@ -11,9 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('products', function (Blueprint $table) {
+           $table->unsignedBigInteger('collection_id')->nullable();
         });
     }
 
@@ -22,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('orders');
+        Schema::table('products', function (Blueprint $table) {
+            $table->dropColumn('collection_id');
+        });
     }
 };

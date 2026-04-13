@@ -1,6 +1,6 @@
 
 .topHeader{
-    background-color: #634C9F;
+    background-color: #112066;
     width: 100%;
     height: 40px;
     height: auto;
@@ -135,7 +135,7 @@
     flex: 0 0 auto;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 20px; 
 }
 
 .profile-sec a {
@@ -167,7 +167,7 @@
 .account-link.stacked .account-text {
   display: flex;
   flex-direction: column;
-
+  
 }
 .account-line1{
     margin: 0;
@@ -215,14 +215,14 @@
   font-weight: bold;
 }
 .nav-link.active {
-    color: #634C9F;
+    color: #112066;
     font-family: Inter;
     font-size: 18px;
     font-style: normal;
     font-weight: 600;
     line-height: 48px;
     letter-spacing: -0.3px;
-    border-bottom: 2px solid #634C9F;
+    border-bottom: 2px solid #112066;
 }
 .nav-link {
     color: #030712;
@@ -322,7 +322,7 @@
   gap: 5.697px;
   flex-shrink: 0;
   border-radius: 8px;
-  background: #634C9F;
+  background: #112066;
   text-decoration: none;
   color: #FFF;
   text-align: center;
@@ -342,7 +342,7 @@
   font-size: 28px;
   font-style: normal;
   font-weight: 700;
-  line-height: 28px;
+  line-height: 28px; 
   letter-spacing: -0.56px;
   margin-bottom: 5px;
 }
@@ -425,7 +425,7 @@
 }
 
 .dot.active {
-  background: #634C9F;
+  background: #112066;
   transform: scale(1.2);
 }
 
@@ -434,15 +434,15 @@
   .banner-section {
     height: 350px;
   }
-
+  
   .slider-container {
     height: 350px;
   }
-
+  
   .slide {
     padding: 30px;
   }
-
+  
   .slide h2 {
     font-size: 32px;
   }
@@ -452,26 +452,26 @@
   .banner-section {
     height: 300px;
   }
-
+  
   .slider-container {
     height: 300px;
   }
-
+  
   .slide h2 {
     font-size: 26px;
     margin-top: 10px;
   }
-
+  
   .slide p {
     font-size: 14px;
   }
-
+  
   .banner-btn {
     width: 120px;
     height: 45px;
     font-size: 13px;
   }
-
+  
   .banner-btn-sec h3 {
     font-size: 22px;
   }
@@ -481,29 +481,29 @@
   .banner-section {
     height: 250px;
   }
-
+  
   .slider-container {
     height: 250px;
   }
-
+  
   .slide {
     padding: 20px;
   }
-
+  
   .slide h2 {
     font-size: 20px;
     letter-spacing: -0.5px;
   }
-
+  
   .slide p {
     font-size: 12px;
     margin-bottom: 10px;
   }
-
+  
   .banner-btn-sec {
     margin-top: 15px;
   }
-
+  
 }
 .cardSection{
   margin-top: 50px;
@@ -512,7 +512,6 @@
   width: 56px;
   height: 57px;
   flex-shrink: 0;
-  margin: 20px;
 }
 .feature-card h5{
   color: #030712;
@@ -559,8 +558,8 @@
   line-height: 30px;
   letter-spacing: -0.88px;
     width: 50%;
-  word-break: break-word;
-  overflow-wrap: break-word;
+  word-break: break-word;       
+  overflow-wrap: break-word;   
 }
 .featureProduct .text02 {
   color: #6B7280;
@@ -584,12 +583,12 @@
   flex-shrink: 0;
   border-radius: 999px;
   border: 1px solid #E5E7EB;
-  background: #FFF;
+  background: #112066;
   text-decoration: none;
-  color: #212529;
+  color: #ffffff;
   text-align: center;
   font-family: Inter;
-
+  
   font-style: normal;
   font-weight: 700;
   letter-spacing: -0.24px;
@@ -662,7 +661,7 @@
 .star-sec i{
   color: #FACC15;
   padding: 2px;
-
+  
 }
 .pricing .main-price{
   color: #DC2626;
@@ -691,18 +690,19 @@
   padding: 8px 11px 9px 15px;
   justify-content: flex-end;
   align-items: flex-start;
-  gap: 56px !important;
+  gap: 80px;
   flex-shrink: 0;
   border-radius: 999px;
-  border: 1px solid #634C9F;
+  border: 1px solid #112066;
   text-decoration: none;
-  color: #634C9F;
-  font-family: Inter;
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 500;
-  letter-spacing: -0.26px;
-  width: 100%;
+  color: #ffffff;
+    font-family: Inter;
+    font-size: 13px;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: -0.26px;
+    width: 100%;
+    background-color: #112066;
 }
 .single-line-ellipsis {
   white-space: nowrap;
@@ -727,5 +727,267 @@
   font-weight: 800;
   text-transform: uppercase;
    position: absolute;
+  
+}
 
+/* Slider Responsive Styles - Mobile & Tablet */
+@media (max-width: 991px) {
+  .banner-section {
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  .slider-container {
+    height: auto;
+    min-height: 350px;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .slide {
+    position: relative;
+    height: auto;
+    min-height: 350px;
+    padding: 30px 20px;
+    display: flex;
+    align-items: center;
+  }
+
+  .slide-content {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .slide h2 {
+    font-size: 28px;
+    line-height: 36px;
+    letter-spacing: -0.5px;
+    margin-top: 0;
+  }
+
+  .slide p {
+    font-size: 14px;
+    margin-bottom: 15px;
+  }
+
+  .banner-btn-sec {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px !important;
+  }
+
+  .banner-btn {
+    width: 160px;
+    height: 45px;
+    font-size: 14px;
+  }
+
+  .banner-btn-sec .ms-3 {
+    margin-left: 0 !important;
+    text-align: center;
+  }
+
+  .banner-btn-sec h3 {
+    font-size: 24px;
+    margin-bottom: 5px;
+  }
+
+  .banner-btn-sec del {
+    font-size: 16px;
+  }
+
+  .slider-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 8px 12px;
+    border-radius: 20px;
+    gap: 8px;
+    z-index: 10;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+}
+
+/* Tablet Specific (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .slider-container {
+    min-height: 380px;
+  }
+
+  .slide {
+    min-height: 380px;
+    padding: 40px 30px;
+  }
+
+  .slide h2 {
+    font-size: 32px;
+    line-height: 42px;
+  }
+
+  .slide p {
+    font-size: 15px;
+  }
+
+  .banner-btn-sec {
+    flex-direction: row;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .banner-btn-sec .ms-3 {
+    margin-left: 0 !important;
+  }
+}
+
+/* Mobile (up to 767px) */
+@media (max-width: 767px) {
+  .slider-container {
+    min-height: 320px;
+  }
+
+  .slide {
+    min-height: 320px;
+    padding: 25px 15px;
+  }
+
+  .slide h2 {
+    font-size: 22px;
+    line-height: 30px;
+    margin-bottom: 10px;
+  }
+
+  .slide p {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .banner-btn {
+    width: 140px;
+    height: 42px;
+    font-size: 13px;
+    padding: 10px 15px;
+  }
+
+  .banner-btn-sec h3 {
+    font-size: 20px;
+  }
+
+  .banner-btn-sec del {
+    font-size: 14px;
+  }
+
+  .banner-btn-sec p {
+    font-size: 10px;
+  }
+
+  .slider-dots {
+    bottom: 10px;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+}
+
+/* Small Mobile (up to 480px) */
+@media (max-width: 480px) {
+  .slider-container {
+    min-height: 280px;
+  }
+
+  .slide {
+    min-height: 280px;
+    padding: 20px 12px;
+  }
+
+  .slide h2 {
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  .slide p {
+    font-size: 11px;
+    margin-bottom: 10px;
+  }
+
+  .banner-btn {
+    width: 120px;
+    height: 38px;
+    font-size: 12px;
+    padding: 8px 12px;
+  }
+
+  .banner-btn-sec h3 {
+    font-size: 18px;
+  }
+
+  .banner-btn-sec del {
+    font-size: 12px;
+  }
+
+  .banner-btn-sec p {
+    font-size: 9px;
+  }
+
+  .slider-dots {
+    bottom: 8px;
+    padding: 5px 8px;
+    gap: 5px;
+  }
+
+  .dot {
+    width: 7px;
+    height: 7px;
+  }
+}
+
+/* Landscape mode for mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+  .banner-section {
+    margin-bottom: 10px;
+  }
+
+  .slider-container {
+    min-height: 250px;
+  }
+
+  .slide {
+    min-height: 250px;
+    padding: 15px 20px;
+  }
+
+  .slide h2 {
+    font-size: 20px;
+    line-height: 28px;
+  }
+
+  .slide p {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .banner-btn-sec {
+    margin-top: 10px !important;
+  }
+
+  .banner-btn {
+    height: 35px;
+    width: 110px;
+    font-size: 11px;
+  }
+
+  .slider-dots {
+    bottom: 5px;
+  }
 }

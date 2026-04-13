@@ -507,11 +507,85 @@ class PermissionSeeder extends Seeder
                 // --------------------------
                 [
                     'name' => 'gallary-delete',
-                    'group' => 'Gallary',
                     'guard_name' => 'admin',
+                    'group' => 'Gallary',
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
+                [
+                    'name' => 'order-visibility',
+                    'guard_name' => 'admin', 
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                ],
+                [
+                    'name' => 'order-create',
+                    'guard_name' => 'admin',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                ],
+                [
+                    'name' => 'order-edit', 
+                    'guard_name' => 'admin', 
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                ],
+                [
+                    'name' => 'order-delete',
+                    'guard_name' => 'admin',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                ],
+                [
+                    'name' => 'order-view',
+                    'guard_name' => 'admin',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                ],
+                [
+                    'name' => 'order-status-update',
+                    'guard_name' => 'admin', 
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                 ],
+                [
+                    'name' => 'order-invoice',
+                    'guard_name' => 'admin', 
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                 ],
+                [
+                    'name' => 'order-courier',
+                    'guard_name' => 'admin', 
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                 ],
+                [
+                    'name' => 'order-tracking',
+                    'guard_name' => 'admin',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                    'group' => 'Order'
+                  ],
+
+                ['name' => 'feature_card-visibility', 'guard_name' => 'admin', 'group' => 'Feature Card'],
+                ['name' => 'feature_card-create', 'guard_name' => 'admin', 'group' => 'Feature Card'],
+                ['name' => 'feature_card-edit', 'guard_name' => 'admin', 'group' => 'Feature Card'],
+                ['name' => 'feature_card-delete', 'guard_name' => 'admin', 'group' => 'Feature Card'],
+                
+                // Promotion Permissions
+                ['name' => 'promotion-visibility', 'guard_name' => 'admin', 'group' => 'Promotion'],
+                ['name' => 'promotion-create', 'guard_name' => 'admin', 'group' => 'Promotion'],
+                ['name' => 'promotion-edit', 'guard_name' => 'admin', 'group' => 'Promotion'],
+                ['name' => 'promotion-delete', 'guard_name' => 'admin', 'group' => 'Promotion'],
 
             ]
         );

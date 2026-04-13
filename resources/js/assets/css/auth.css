@@ -1,0 +1,513 @@
+/* resources/assets/css/auth.css */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #112066;
+    padding: 2rem;
+    font-family: Inter;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.auth-card {
+    background: white;
+    border-radius: 20px;
+    padding: 2.5rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    animation: slideUp 0.5s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.auth-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #634C9F 0%, #4a3780 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.auth-icon i {
+    font-size: 2rem;
+    color: white;
+}
+
+.auth-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.auth-subtitle {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Login Methods Tabs */
+.login-methods-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 1rem;
+}
+
+.method-tab {
+    flex: 1;
+    padding: 0.75rem;
+    background: none;
+    border: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 10px;
+}
+
+.method-tab:hover {
+    background: #f8f9fa;
+    color: #634C9F;
+}
+
+.method-tab.active {
+    color: #634C9F;
+    background: rgba(99, 76, 159, 0.1);
+    position: relative;
+}
+
+.method-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #634C9F;
+}
+
+/* Floating Input Styles */
+.floating-input-group {
+    position: relative;
+}
+
+.floating-input-wrapper {
+    position: relative;
+    margin-bottom: 0;
+}
+
+.floating-input {
+    width: 100%;
+    padding: 0.9rem 1rem 0.4rem;
+    border: 2px solid #e1e1e1;
+    border-radius: 12px;
+    outline: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: 'Inter', sans-serif;
+}
+
+.floating-input.with-icon {
+    padding-left: 2.5rem;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    font-size: 1rem;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.floating-label {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    padding: 0 0.25rem;
+    color: #999;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    border-radius: 4px;
+    font-family: 'Inter', sans-serif;
+}
+
+.floating-input.with-icon ~ .floating-label {
+    left: 2.5rem;
+}
+
+.floating-input-wrapper.focused .floating-input,
+.floating-input-wrapper.has-value .floating-input {
+    border-color: #634C9F;
+    padding-top: 1.1rem;
+    padding-bottom: 0.2rem;
+}
+
+.floating-input-wrapper.focused .floating-label,
+.floating-input-wrapper.has-value .floating-label {
+    top: 0;
+    transform: translateY(-50%) scale(0.8);
+    color: #634C9F;
+    font-weight: 500;
+}
+
+.floating-input-wrapper.error .floating-input {
+    border-color: #dc3545;
+}
+
+.floating-input-wrapper.error .floating-label {
+    color: #dc3545;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+    padding-left: 0.5rem;
+}
+
+/* Password Toggle */
+.password-toggle {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.password-toggle:hover {
+    color: #634C9F;
+}
+
+/* Auth Options */
+.auth-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-input {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    margin-right: 8px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+    background: #634C9F;
+    border-color: #634C9F;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 10px;
+}
+
+.checkbox-text {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.forgot-link {
+    color: #634C9F;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.forgot-link:hover {
+    color: #4a3780;
+    text-decoration: underline;
+}
+
+/* Auth Button */
+.auth-button {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, #634C9F 0%, #4a3780 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.auth-button:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(99, 76, 159, 0.3);
+}
+
+.auth-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* OTP Section */
+.otp-resend {
+    text-align: right;
+    margin-top: -0.5rem;
+    margin-bottom: 1rem;
+}
+
+.resend-btn {
+    background: none;
+    border: none;
+    color: #634C9F;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: color 0.3s ease;
+}
+
+.resend-btn:hover:not(:disabled) {
+    color: #4a3780;
+    text-decoration: underline;
+}
+
+.resend-btn:disabled {
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Google Login Section */
+.google-login-section {
+    text-align: center;
+}
+
+.google-login-btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: white;
+    color: #333;
+    border: 2px solid #e1e1e1;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.google-login-btn:hover {
+    background: #f8f9fa;
+    border-color: #634C9F;
+    transform: translateY(-2px);
+}
+
+.google-login-btn i {
+    font-size: 1.2rem;
+    color: #4285f4;
+}
+
+.google-info {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Divider */
+.auth-divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: calc(50% - 60px);
+    height: 1px;
+    background: #e1e1e1;
+}
+
+.auth-divider::before {
+    left: 0;
+}
+
+.auth-divider::after {
+    right: 0;
+}
+
+.auth-divider span {
+    background: white;
+    padding: 0 1rem;
+    color: #999;
+    font-size: 0.85rem;
+}
+
+/* Auth Footer */
+.auth-footer {
+    text-align: center;
+}
+
+.auth-link {
+    color: #634C9F;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+    color: #4a3780;
+    text-decoration: underline;
+}
+
+/* Alert */
+.alert {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+
+.alert-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-page {
+        padding: 1rem;
+    }
+    
+    .auth-card {
+        padding: 1.5rem;
+    }
+    
+    .auth-title {
+        font-size: 1.5rem;
+    }
+    
+    .login-methods-tabs {
+        gap: 5px;
+    }
+    
+    .method-tab {
+        font-size: 0.85rem;
+        padding: 0.6rem;
+    }
+}
+/* Add to auth.css */
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.input-group {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.input-group-text {
+    background-color: white;
+    border: 2px solid #e1e1e1;
+    border-right: none;
+    padding: 0.75rem 1rem;
+}
+
+.form-control {
+    border: 2px solid #e1e1e1;
+    border-left: none;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #634C9F;
+    box-shadow: none;
+    outline: none;
+}
+
+.form-control.is-invalid {
+    border-color: #dc3545;
+}
+
+.input-group .btn-outline-secondary {
+    border: 2px solid #e1e1e1;
+    border-left: none;
+    background: white;
+}
+
+.input-group .btn-outline-secondary:hover {
+    background: #f8f9fa;
+    border-color: #634C9F;
+    color: #634C9F;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .form-control, .input-group-text, .btn-outline-secondary {
+        font-size: 0.9rem;
+        padding: 0.6rem 0.8rem;
+    }
+}

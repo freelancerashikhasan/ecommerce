@@ -1,6 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useCart } from '../contexts/CartContext';
 import { Link, useForm } from '@inertiajs/react';
+import axios from 'axios';
+
+// Move FormInput component outside
+const FormInput = ({ type = "text", name, label, value, onChange, error, required = false, rows }) => {
+    if (type === "textarea") {
+        return (
+            <div className="mb-4">
+                <label className="form-label fw-semibold mb-2">
+                    {label} {required && <span className="text-danger">*</span>}
+                </label>
+                <textarea
+                    name={name}
+                    rows={rows || 3}
+                    value={value}
+                    onChange={onChange}
+                    className={`form-control ${error ? 'is-invalid' : ''}`}
+                    style={{
+                        borderRadius: '10px',
+                        border: '2px solid #e1e1e1',
+                        padding: '0.75rem 1rem',
+                        fontSize: '0.95rem'
+                    }}
+                    required={required}
+                />
+                {error && <div className="invalid-feedback">{error}</div>}
+            </div>
+        );
+    }
+
+    return (
+        <div className="mb-4">
+            <label className="form-label fw-semibold mb-2">
+                {label} {required && <span className="text-danger">*</span>}
+            </label>
+            <input
+                type={type}
+                name={name}
+                value={value}
+                onChange={onChange}
+                className={`form-control ${error ? 'is-invalid' : ''}`}
+                style={{
+                    borderRadius: '10px',
+                    border: '2px solid #e1e1e1',
+                    padding: '0.75rem 1rem',
+                    fontSize: '0.95rem'
+                }}
+                required={required}
+            />
+            {error && <div className="invalid-feedback">{error}</div>}
+        </div>
+    );
+};
 
 export default function CartModal() {
     const {
@@ -14,6 +66,10 @@ export default function CartModal() {
         clearCart
     } = useCart();
 
+    const [deliveryArea, setDeliveryArea] = useState('inside');
+    const [deliveryCharge, setDeliveryCharge] = useState(50);
+    const [isMobile, setIsMobile] = useState(false);
+
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
@@ -22,98 +78,110 @@ export default function CartModal() {
         address: '',
         city: '',
         postal_code: '',
-        notes: ''
+        delivery_area: 'inside',
+        delivery_charge: 50,
+        notes: '',
+        payment_method: 'cash_on_delivery'
     });
 
-    const handleCheckout = (e) => {
+    // Check screen size
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth <= 767);
+        };
+        
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
+
+    // Memoize total calculation
+    const calculateTotal = useMemo(() => {
+        const subtotal = getCartTotal();
+        return subtotal + deliveryCharge;
+    }, [getCartTotal, deliveryCharge]);
+
+    // Update delivery charge when area changes
+    useEffect(() => {
+        const charge = deliveryArea === 'inside' ? 50 : 90;
+        setDeliveryCharge(charge);
+        setData('delivery_area', deliveryArea);
+        setData('delivery_charge', charge);
+    }, [deliveryArea, setData]);
+
+    const handleDeliveryAreaChange = (e) => {
+        setDeliveryArea(e.target.value);
+    };
+
+    // Memoize input change handler
+    const handleInputChange = useCallback((field) => (e) => {
+        setData(field, e.target.value);
+    }, [setData]);
+
+    const handleCheckout = useCallback((e) => {
         e.preventDefault();
 
-        // Prepare order data with cart items
-        const orderData = {
-            ...data,
-            cart_items: cartItems.map(item => ({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                quantity: item.quantity,
-                image: item.image
-            })),
-            total: getCartTotal()
-        };
-
-        post('/guest-checkout', {
-            data: orderData,
-            onSuccess: () => {
-                setShowCartModal(false);
-                reset();
-                clearCart();
-            },
-            onError: (errors) => {
-                console.log('Checkout errors:', errors);
+        // Create FormData object
+        const formData = new FormData();
+        
+        // Add all form fields
+        formData.append('first_name', data.first_name);
+        formData.append('last_name', data.last_name);
+        formData.append('email', data.email);
+        formData.append('phone', data.phone);
+        formData.append('address', data.address);
+        formData.append('city', data.city);
+        formData.append('postal_code', data.postal_code);
+        formData.append('delivery_area', data.delivery_area);
+        formData.append('delivery_charge', data.delivery_charge);
+        formData.append('notes', data.notes);
+        formData.append('payment_method', data.payment_method);
+        formData.append('subtotal', getCartTotal());
+        formData.append('tax', 0);
+        formData.append('total', calculateTotal);
+        
+        // Add cart items as JSON string
+        const cartItemsData = cartItems.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            image: item.image || null,
+            sku: item.sku || 'N/A'
+        }));
+        
+        formData.append('cart_items', JSON.stringify(cartItemsData));
+        
+        axios.post('/guest-checkout', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             }
+        })
+        .then(response => {
+            if (response.data.redirect) {
+                window.location.href = response.data.redirect;
+            }
+            setShowCartModal(false);
+            reset();
+            clearCart();
+        })
+        .catch(error => {
+            console.log('Checkout errors:', error.response?.data?.errors || error);
         });
-    };
+    }, [data, cartItems, getCartTotal, calculateTotal, reset, clearCart, setShowCartModal]);
 
     if (!showCartModal) return null;
 
-    // Floating label input component
-    const FloatingInput = ({ type = "text", name, label, value, onChange, error, required = false, rows }) => {
-        const [focused, setFocused] = useState(false);
-        const hasValue = value && value.length > 0;
-
-        if (type === "textarea") {
-            return (
-                <div className="floating-input-group mb-4">
-                    <div className={`floating-input-wrapper ${focused ? 'focused' : ''} ${error ? 'error' : ''} ${hasValue ? 'has-value' : ''}`}>
-                        <textarea
-                            name={name}
-                            rows={rows || 3}
-                            value={value}
-                            onChange={onChange}
-                            onFocus={() => setFocused(true)}
-                            onBlur={() => setFocused(false)}
-                            className="floating-textarea"
-                            required={required}
-                        />
-                        <label className="floating-label">{label} {required && <span className="text-danger">*</span>}</label>
-                    </div>
-                    {error && <div className="error-message">{error}</div>}
-                </div>
-            );
-        }
-
-        return (
-            <div className="floating-input-group mb-4">
-                <div className={`floating-input-wrapper ${focused ? 'focused' : ''} ${error ? 'error' : ''} ${hasValue ? 'has-value' : ''}`}>
-                    <input
-                        type={type}
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        onFocus={() => setFocused(true)}
-                        onBlur={() => setFocused(false)}
-                        className="floating-input"
-                        required={required}
-                    />
-                    <label className="floating-label">{label} {required && <span className="text-danger">*</span>}</label>
-                </div>
-                {error && <div className="error-message">{error}</div>}
-            </div>
-        );
-    };
-
     return (
         <>
-            {/* Modal Backdrop */}
             <div
                 className="modal-backdrop fade show"
                 style={{ zIndex: 1040 }}
-                onClick={() => {
-                    setShowCartModal(false);
-                }}
+                onClick={() => setShowCartModal(false)}
             />
 
-            {/* Modal */}
             <div
                 className="modal fade show"
                 style={{ display: 'block', zIndex: 1050 }}
@@ -121,16 +189,14 @@ export default function CartModal() {
             >
                 <div className="modal-dialog modal-dialog-centered modal-lg">
                     <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '20px', overflow: 'hidden' }}>
-                        {/* Modal Header with Gradient */}
                         <div className="modal-header border-0" style={{
-                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                            padding: '1.5rem 2rem'
+                            background: '#112066',
                         }}>
                             <h5 className="modal-title text-white fw-bold">
                                 <i className="fas fa-lock me-2"></i>
                                 Secure Checkout
                                 {cartItems.length > 0 && (
-                                    <span className="ms-2 badge bg-white text-primary rounded-pill px-3">
+                                    <span className="ms-2 badge bg-white text-dark rounded-pill px-3">
                                         {getCartCount()} {getCartCount() === 1 ? 'Item' : 'Items'}
                                     </span>
                                 )}
@@ -138,9 +204,7 @@ export default function CartModal() {
                             <button
                                 type="button"
                                 className="btn-close btn-close-white"
-                                onClick={() => {
-                                    setShowCartModal(false);
-                                }}
+                                onClick={() => setShowCartModal(false)}
                             />
                         </div>
 
@@ -153,8 +217,8 @@ export default function CartModal() {
                                     <h5 className="text-muted mb-3">Your cart is empty</h5>
                                     <p className="text-muted mb-4">Looks like you haven't added anything to your cart yet</p>
                                     <button
-                                        className="btn btn-primary px-4 py-2 rounded-pill"
-                                        style={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', border: 'none' }}
+                                        className="btn px-4 py-2 rounded-pill"
+                                        style={{ background: '#112066', color: 'white', border: 'none' }}
                                         onClick={() => setShowCartModal(false)}
                                     >
                                         Continue Shopping
@@ -162,14 +226,12 @@ export default function CartModal() {
                                 </div>
                             ) : (
                                 <div className="row">
-                                    {/* Left Column - Cart Items */}
                                     <div className="col-lg-5 mb-4 mb-lg-0">
-                                        <h6 className="fw-bold mb-3" style={{ color: '#667eea' }}>
+                                        <h6 className="fw-bold mb-3" style={{ color: '#112066' }}>
                                             <i className="fas fa-shopping-cart me-2"></i>
                                             Your Items
                                         </h6>
 
-                                        {/* Cart Items List */}
                                         <div className="cart-items" style={{ maxHeight: '400px', overflowY: 'auto', paddingRight: '10px' }}>
                                             {cartItems.map((item, index) => (
                                                 <div
@@ -210,7 +272,7 @@ export default function CartModal() {
                                                             </div>
 
                                                             <div className="d-flex justify-content-between align-items-center mt-2">
-                                                                <span className="text-primary fw-bold">
+                                                                <span className="fw-bold" style={{ color: '#112066' }}>
                                                                     ${item.price}
                                                                 </span>
 
@@ -232,7 +294,7 @@ export default function CartModal() {
                                                                     </button>
                                                                 </div>
 
-                                                                <span className="fw-bold text-primary" style={{ fontSize: '0.95rem' }}>
+                                                                <span className="fw-bold" style={{ color: '#112066' }}>
                                                                     ${(item.price * item.quantity).toFixed(2)}
                                                                 </span>
                                                             </div>
@@ -242,7 +304,6 @@ export default function CartModal() {
                                             ))}
                                         </div>
 
-                                        {/* Mini Cart Summary */}
                                         <div className="mt-3 p-3" style={{
                                             background: 'linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%)',
                                             borderRadius: '12px'
@@ -252,52 +313,45 @@ export default function CartModal() {
                                                 <span className="fw-bold">${getCartTotal().toFixed(2)}</span>
                                             </div>
                                             <div className="d-flex justify-content-between mb-2">
-                                                <span className="text-muted">Shipping:</span>
-                                                <span className="text-success">Free</span>
-                                            </div>
-                                            <div className="d-flex justify-content-between mb-2">
-                                                <span className="text-muted">Tax (10%):</span>
-                                                <span>${(getCartTotal() * 0.1).toFixed(2)}</span>
+                                                <span className="text-muted">Delivery Charge:</span>
+                                                <span className="fw-bold">${deliveryCharge.toFixed(2)}</span>
                                             </div>
                                             <hr className="my-2" />
                                             <div className="d-flex justify-content-between">
                                                 <span className="fw-bold">Total:</span>
-                                                <span className="h6 fw-bold" style={{
-                                                    color: '#667eea'
-                                                }}>
-                                                    ${(getCartTotal() * 1.1).toFixed(2)}
+                                                <span className="h6 fw-bold" style={{ color: '#112066' }}>
+                                                    ${calculateTotal.toFixed(2)}
                                                 </span>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {/* Right Column - Checkout Form */}
                                     <div className="col-lg-7">
-                                        <h6 className="fw-bold mb-3" style={{ color: '#667eea' }}>
+                                        <h6 className="fw-bold mb-3" style={{ color: '#112066' }}>
                                             <i className="fas fa-user me-2"></i>
                                             Guest Checkout
                                         </h6>
 
-                                        <form onSubmit={handleCheckout}>
+                                        <form onSubmit={handleCheckout} id="checkout-form-modal">
                                             <div className="row">
-                                                <div className="col-md-6">
-                                                    <FloatingInput
+                                                <div className="col-6">
+                                                    <FormInput
                                                         type="text"
                                                         name="first_name"
                                                         label="First Name"
                                                         value={data.first_name}
-                                                        onChange={e => setData('first_name', e.target.value)}
+                                                        onChange={handleInputChange('first_name')}
                                                         error={errors.first_name}
                                                         required
                                                     />
                                                 </div>
-                                                <div className="col-md-6">
-                                                    <FloatingInput
+                                                <div className="col-6">
+                                                    <FormInput
                                                         type="text"
                                                         name="last_name"
                                                         label="Last Name"
                                                         value={data.last_name}
-                                                        onChange={e => setData('last_name', e.target.value)}
+                                                        onChange={handleInputChange('last_name')}
                                                         error={errors.last_name}
                                                         required
                                                     />
@@ -305,80 +359,151 @@ export default function CartModal() {
                                             </div>
 
                                             <div className="row">
-                                                <div className="col-md-6">
-                                                    <FloatingInput
+                                                <div className="col-6">
+                                                    <FormInput
                                                         type="email"
                                                         name="email"
                                                         label="Email Address"
                                                         value={data.email}
-                                                        onChange={e => setData('email', e.target.value)}
+                                                        onChange={handleInputChange('email')}
                                                         error={errors.email}
                                                         required
                                                     />
                                                 </div>
-                                                <div className="col-md-6">
-                                                    <FloatingInput
+                                                <div className="col-6">
+                                                    <FormInput
                                                         type="tel"
                                                         name="phone"
                                                         label="Phone Number"
                                                         value={data.phone}
-                                                        onChange={e => setData('phone', e.target.value)}
+                                                        onChange={handleInputChange('phone')}
                                                         error={errors.phone}
                                                         required
                                                     />
                                                 </div>
                                             </div>
 
-                                            <FloatingInput
+                                            <FormInput
                                                 type="text"
                                                 name="address"
                                                 label="Street Address"
                                                 value={data.address}
-                                                onChange={e => setData('address', e.target.value)}
+                                                onChange={handleInputChange('address')}
                                                 error={errors.address}
                                                 required
                                             />
 
                                             <div className="row">
                                                 <div className="col-md-6">
-                                                    <FloatingInput
+                                                    <FormInput
                                                         type="text"
                                                         name="city"
                                                         label="City"
                                                         value={data.city}
-                                                        onChange={e => setData('city', e.target.value)}
+                                                        onChange={handleInputChange('city')}
                                                         error={errors.city}
                                                         required
                                                     />
                                                 </div>
-                                                <div className="col-md-6">
-                                                    <FloatingInput
-                                                        type="text"
-                                                        name="postal_code"
-                                                        label="Postal Code"
-                                                        value={data.postal_code}
-                                                        onChange={e => setData('postal_code', e.target.value)}
-                                                        error={errors.postal_code}
-                                                        required
-                                                    />
+                                             
+                                            </div>
+
+                                            {/* Delivery Area Selection */}
+                                            <div className="mb-4">
+                                                <label className="form-label fw-semibold mb-2">
+                                                    <i className="fas fa-truck me-2"></i>
+                                                    Delivery Area <span className="text-danger">*</span>
+                                                </label>
+                                                <div className="delivery-options p-3 rounded d-flex " style={{ background: '#f8f9fa' }}>
+                                                    <div className="form-check mb-3 me-2">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="delivery_area"
+                                                            id="insideDhakaModal"
+                                                            value="inside"
+                                                            checked={deliveryArea === 'inside'}
+                                                            onChange={handleDeliveryAreaChange}
+                                                            style={{ cursor: 'pointer' }}
+                                                        />
+                                                        <label className="form-check-label ms-2" htmlFor="insideDhakaModal">
+                                                            <strong>Inside Dhaka</strong>
+                                                            <br />
+                                                            <small className="text-muted">Delivery Charge: $50.00</small>
+                                                        </label>
+                                                    </div>
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="delivery_area"
+                                                            id="outsideDhakaModal"
+                                                            value="outside"
+                                                            checked={deliveryArea === 'outside'}
+                                                            onChange={handleDeliveryAreaChange}
+                                                            style={{ cursor: 'pointer' }}
+                                                        />
+                                                        <label className="form-check-label ms-2" htmlFor="outsideDhakaModal">
+                                                            <strong>Outside Dhaka</strong>
+                                                            <br />
+                                                            <small className="text-muted">Delivery Charge: $90.00</small>
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <FloatingInput
+                                            <FormInput
                                                 type="textarea"
                                                 name="notes"
                                                 label="Order Notes (Optional)"
                                                 value={data.notes}
-                                                onChange={e => setData('notes', e.target.value)}
+                                                onChange={handleInputChange('notes')}
                                                 rows="2"
                                             />
 
+                                            {/* Payment Method - Cash on Delivery Only */}
+                                            <div className="mb-4">
+                                                <label className="form-label fw-semibold mb-2">
+                                                    <i className="fas fa-credit-card me-2"></i>
+                                                    Payment Method <span className="text-danger">*</span>
+                                                </label>
+                                                <div className="payment-method-card p-3 rounded" style={{
+                                                    background: '#f8f9fa',
+                                                    border: '2px solid #e9ecef',
+                                                    borderRadius: '10px'
+                                                }}>
+                                                    <div className="form-check">
+                                                        <input
+                                                            className="form-check-input"
+                                                            type="radio"
+                                                            name="payment_method"
+                                                            id="cashOnDeliveryModal"
+                                                            value="cash_on_delivery"
+                                                            checked={data.payment_method === 'cash_on_delivery'}
+                                                            onChange={handleInputChange('payment_method')}
+                                                        />
+                                                        <label className="form-check-label ms-2" htmlFor="cashOnDeliveryModal">
+                                                            <div className="d-flex align-items-center">
+                                                                <i className="fas fa-money-bill-wave fs-4 me-2" style={{ color: '#2ecc71' }}></i>
+                                                                <div>
+                                                                    <strong>Cash on Delivery</strong>
+                                                                    <br />
+                                                                    <small className="text-muted">Pay when you receive your order</small>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Desktop Button - Hidden on mobile */}
                                             <button
                                                 type="submit"
-                                                className="btn btn-success w-100 py-3 rounded-pill mt-3"
+                                                className="btn w-100 py-3 rounded-pill mt-3 desktop-place-order-btn"
                                                 disabled={processing}
                                                 style={{
-                                                    background: 'linear-gradient(135deg, #28a745 0%, #20c997 100%)',
+                                                    background: '#112066',
+                                                    color: 'white',
                                                     border: 'none',
                                                     fontSize: '1.1rem',
                                                     fontWeight: '600'
@@ -392,7 +517,7 @@ export default function CartModal() {
                                                 ) : (
                                                     <>
                                                         <i className="fas fa-lock me-2"></i>
-                                                        Place Order • ${(getCartTotal() * 1.1).toFixed(2)}
+                                                        Place Order • ${calculateTotal.toFixed(2)}
                                                     </>
                                                 )}
                                             </button>
@@ -407,7 +532,7 @@ export default function CartModal() {
                             )}
                         </div>
 
-                        {/* Modal Footer */}
+                        {/* Modal Footer - Original buttons always visible */}
                         <div className="modal-footer border-0 p-3" style={{ background: '#f8f9fa' }}>
                             <button
                                 type="button"
@@ -421,20 +546,43 @@ export default function CartModal() {
                             {cartItems.length > 0 && (
                                 <Link
                                     href="/cart"
-                                    className="btn btn-outline-primary rounded-pill px-4"
+                                    className="btn rounded-pill px-4"
                                     onClick={() => setShowCartModal(false)}
-                                    style={{ borderWidth: '2px' }}
+                                    style={{ background: '#112066', color: 'white', border: 'none' }}
                                 >
                                     <i className="fas fa-shopping-cart me-2"></i>
                                     View Full Cart
                                 </Link>
                             )}
                         </div>
+
+                        {/* Mobile Sticky Place Order Button in Footer */}
+                        {isMobile && cartItems.length > 0 && (
+                            <div className="mobile-sticky-order-btn">
+                                <button
+                                    type="submit"
+                                    form="checkout-form-modal"
+                                    className="mobile-place-order-btn"
+                                    disabled={processing}
+                                >
+                                    {processing ? (
+                                        <>
+                                            <span className="spinner-border spinner-border-sm me-2" />
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="fas fa-lock me-2"></i>
+                                            Place Order • ${calculateTotal.toFixed(2)}
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
 
-            {/* Add custom styles */}
             <style jsx>{`
                 @keyframes slideIn {
                     from {
@@ -447,87 +595,29 @@ export default function CartModal() {
                     }
                 }
 
-                .floating-input-wrapper {
-                    position: relative;
-                    margin-bottom: 0;
+                .form-control:focus {
+                    border-color: #112066;
+                    box-shadow: 0 0 0 2px rgba(99, 76, 159, 0.1);
                 }
 
-                .floating-input, .floating-textarea {
-                    width: 100%;
-                    padding: 0.9rem 1rem 0.4rem;
-                    border: 2px solid #e1e1e1;
-                    border-radius: 10px;
-                    outline: none;
-                    font-size: 0.95rem;
+                .delivery-options .form-check {
+                    padding: 8px;
+                    border-radius: 8px;
                     transition: all 0.3s ease;
-                    background: white;
-                    font-family: Inter;
-
                 }
 
-                .floating-textarea {
-                    min-height: 70px;
-                    resize: vertical;
-                    font-family: Inter;
-
+                .delivery-options .form-check:hover {
+                    background: white;
+                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
                 }
 
-                .floating-label {
-                    position: absolute;
-                    left: 1rem;
-                    top: 50%;
-                    transform: translateY(-50%);
-                    background: white;
-                    padding: 0 0.25rem;
-                    color: #999;
-                    font-size: 0.95rem;
+                .payment-method-card {
                     transition: all 0.3s ease;
-                    pointer-events: none;
-                    border-radius: 4px;
-                    font-family: Inter;
-
                 }
 
-                .floating-textarea ~ .floating-label {
-                    top: 1rem;
-                    transform: none;
-                    font-family: Inter;
-
-                }
-
-                .floating-input-wrapper.focused .floating-input,
-                .floating-input-wrapper.focused .floating-textarea,
-                .floating-input-wrapper.has-value .floating-input,
-                .floating-input-wrapper.has-value .floating-textarea {
-                    border-color: #667eea;
-                    padding-top: 1.1rem;
-                    padding-bottom: 0.2rem;
-                }
-
-                .floating-input-wrapper.focused .floating-label,
-                .floating-input-wrapper.has-value .floating-label {
-                    top: 0;
-                    transform: translateY(-50%) scale(0.8);
-                    color: #667eea;
-                    font-weight: 500;
-                }
-
-                .floating-input-wrapper.error .floating-input,
-                .floating-input-wrapper.error .floating-textarea {
-                    border-color: #dc3545;
-                }
-
-                .floating-input-wrapper.error .floating-label {
-                    color: #dc3545;
-                }
-
-                .error-message {
-                    color: #dc3545;
-                    font-size: 0.8rem;
-                    margin-top: 0.2rem;
-                    padding-left: 0.5rem;
-                    font-family: Inter;
-
+                .payment-method-card:hover {
+                    border-color: #112066;
+                    background: white;
                 }
 
                 .cart-item-card {
@@ -541,14 +631,12 @@ export default function CartModal() {
 
                 .quantity-control button {
                     transition: all 0.3s ease;
-                    font-family: Inter;
-
                 }
 
                 .quantity-control button:hover {
-                    background: #667eea;
+                    background: #112066;
                     color: white;
-                    border-color: #667eea;
+                    border-color: #112066;
                 }
 
                 ::-webkit-scrollbar {
@@ -567,6 +655,72 @@ export default function CartModal() {
 
                 ::-webkit-scrollbar-thumb:hover {
                     background: #a8a8a8;
+                }
+
+                /* Mobile Styles */
+                @media (max-width: 767px) {
+                    /* Hide desktop button on mobile */
+                    .desktop-place-order-btn {
+                        display: none !important;
+                    }
+                    
+                    /* Add padding to modal body to prevent content hiding behind sticky button */
+                    .modal-body {
+                        padding-bottom: 80px !important;
+                    }
+                    
+                    /* Make modal footer buttons smaller on mobile */
+                    .modal-footer .btn {
+                        padding: 8px 16px !important;
+                        font-size: 13px !important;
+                    }
+                }
+                
+                /* Mobile Sticky Order Button in Footer */
+                .mobile-sticky-order-btn {
+                    position: sticky;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background: white;
+                    padding: 12px 16px;
+                    border-top: 1px solid #e9ecef;
+                    box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+                    z-index: 10;
+                    display: none;
+                }
+                
+                @media (max-width: 767px) {
+                    .mobile-sticky-order-btn {
+                        display: block;
+                    }
+                }
+                
+                .mobile-place-order-btn {
+                    width: 100%;
+                    background: #112066;
+                    color: white;
+                    border: none;
+                    border-radius: 12px;
+                    padding: 14px 20px;
+                    font-size: 16px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                }
+                
+                .mobile-place-order-btn:active {
+                    transform: scale(0.98);
+                    background: #0d1a52;
+                }
+                
+                .mobile-place-order-btn:disabled {
+                    opacity: 0.7;
+                    cursor: not-allowed;
                 }
             `}</style>
         </>

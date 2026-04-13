@@ -21,30 +21,57 @@
                         
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Product Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" required>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $product->name) }}" required>
                         </div>
                         
                         <div class="col-md-6 mb-3">
                             <label for="sku" class="form-label">SKU <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="sku" name="sku" value="{{ $product->sku }}" required>
+                            <input type="text" class="form-control" id="sku" name="sku" value="{{ old('sku', $product->sku) }}" required>
                         </div>
                         
                         <div class="col-md-12 mb-3">
                             <label for="short_description" class="form-label">Short Description</label>
-                            <textarea class="form-control" id="short_description" name="short_description" rows="3">{{ $product->short_description }}</textarea>
+                            <textarea class="form-control" id="short_description" name="short_description" rows="3">{{ old('short_description', $product->short_description) }}</textarea>
                         </div>
                         
                         <div class="col-md-12 mb-3">
                             <label for="description" class="form-label">Full Description</label>
-                            <textarea class="form-control" id="description" name="description" rows="5">{{ $product->description }}</textarea>
+                            <textarea class="form-control" id="description" name="description" rows="5">{{ old('description', $product->description) }}</textarea>
                         </div>
                         
-                        <div class="col-md-6 mb-3">
-                            <label for="categories" class="form-label">Categories</label>
-                            <select class="form-select select2" id="categories" name="categories[]" multiple>
+                        <div class="col-md-4 mb-3">
+                            <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
+                            <select class="form-select" id="category_id" name="category_id" required>
+                                <option value="">Select Category</option>
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ in_array($category->id, $product->categories->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                    <option value="{{ $category->id }}" {{ old('category_id', $product->category_id) == $category->id ? 'selected' : '' }}>
                                         {{ $category->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="subcategory_id" class="form-label">Subcategory</label>
+                            <select class="form-select" id="subcategory_id" name="subcategory_id">
+                                <option value="">Select Subcategory</option>
+                                @if($product->category_id)
+                                    @foreach($subcategories as $subcategory)
+                                        <option value="{{ $subcategory->id }}" {{ old('subcategory_id', $product->subcategory_id) == $subcategory->id ? 'selected' : '' }}>
+                                            {{ $subcategory->name }}
+                                        </option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="collection_id" class="form-label">Collection</label>
+                            <select class="form-select" id="collection_id" name="collection_id">
+                                <option value="">Select Collection</option>
+                                @foreach($collections as $collection)
+                                    <option value="{{ $collection->id }}" {{ old('collection_id', $product->collection_id) == $collection->id ? 'selected' : '' }}>
+                                        {{ $collection->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -53,8 +80,8 @@
                         <div class="col-md-6 mb-3">
                             <label for="product_type" class="form-label">Product Type <span class="text-danger">*</span></label>
                             <select class="form-select" id="product_type" name="product_type" required>
-                                <option value="simple" {{ $product->product_type == 'simple' ? 'selected' : '' }}>Simple Product</option>
-                                <option value="variable" {{ $product->product_type == 'variable' ? 'selected' : '' }}>Variable Product</option>
+                                <option value="simple" {{ old('product_type', $product->product_type) == 'simple' ? 'selected' : '' }}>Simple Product</option>
+                                <option value="variable" {{ old('product_type', $product->product_type) == 'variable' ? 'selected' : '' }}>Variable Product</option>
                             </select>
                         </div>
                     </div>
@@ -67,36 +94,37 @@
                         
                         <div class="col-md-4 mb-3">
                             <label for="regular_price" class="form-label">Regular Price <span class="text-danger">*</span></label>
-                            <input type="number" step="0.01" class="form-control" id="regular_price" name="regular_price" value="{{ $product->regular_price }}" required>
+                            <input type="number" step="0.01" class="form-control" id="regular_price" name="regular_price" value="{{ old('regular_price', $product->regular_price) }}" required>
                         </div>
                         
                         <div class="col-md-4 mb-3">
                             <label for="sale_price" class="form-label">Sale Price</label>
-                            <input type="number" step="0.01" class="form-control" id="sale_price" name="sale_price" value="{{ $product->sale_price }}">
+                            <input type="number" step="0.01" class="form-control" id="sale_price" name="sale_price" value="{{ old('sale_price', $product->sale_price) }}">
+                            <small class="text-muted">Must be less than regular price</small>
                         </div>
                         
                         <div class="col-md-4 mb-3">
                             <label for="purchase_price" class="form-label">Purchase Price</label>
-                            <input type="number" step="0.01" class="form-control" id="purchase_price" name="purchase_price" value="{{ $product->purchase_price }}">
+                            <input type="number" step="0.01" class="form-control" id="purchase_price" name="purchase_price" value="{{ old('purchase_price', $product->purchase_price) }}">
                         </div>
                         
                         <div class="col-md-4 mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="manage_stock" name="manage_stock" {{ $product->manage_stock ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="manage_stock" name="manage_stock" {{ old('manage_stock', $product->manage_stock) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="manage_stock">
                                     Manage Stock
                                 </label>
                             </div>
                         </div>
                         
-                        <div class="col-md-4 mb-3 stock-field" style="{{ $product->manage_stock ? '' : 'display: none;' }}">
+                        <div class="col-md-4 mb-3 stock-field" style="{{ old('manage_stock', $product->manage_stock) ? '' : 'display: none;' }}">
                             <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                            <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" value="{{ $product->stock_quantity }}">
+                            <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" value="{{ old('stock_quantity', $product->stock_quantity) }}">
                         </div>
                         
                         <div class="col-md-4 mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="in_stock" name="in_stock" {{ $product->in_stock ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="in_stock" name="in_stock" {{ old('in_stock', $product->in_stock) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="in_stock">
                                     In Stock
                                 </label>
@@ -105,7 +133,7 @@
                         
                         <div class="col-md-4 mb-3">
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="status" name="status" {{ $product->status ? 'checked' : '' }}>
+                                <input class="form-check-input" type="checkbox" id="status" name="status" {{ old('status', $product->status) ? 'checked' : '' }}>
                                 <label class="form-check-label" for="status">
                                     Active
                                 </label>
@@ -131,7 +159,7 @@
                         
                         <div class="col-md-6 mb-3">
                             <label for="video_link" class="form-label">Video Link (YouTube/Vimeo)</label>
-                            <input type="url" class="form-control" id="video_link" name="video_link" value="{{ $product->video_link }}" placeholder="https://www.youtube.com/watch?v=...">
+                            <input type="url" class="form-control" id="video_link" name="video_link" value="{{ old('video_link', $product->video_link) }}" placeholder="https://www.youtube.com/watch?v=...">
                         </div>
                         
                         <div class="col-md-12 mb-3">
@@ -140,7 +168,7 @@
                             <input type="hidden" id="deleted_images" name="deleted_images">
                             
                             {{-- Existing Gallery Images --}}
-                            @if($product->images->count() > 0)
+                            @if($product->images && $product->images->count() > 0)
                                 <div class="row mt-3">
                                     <div class="col-12">
                                         <label class="form-label">Current Gallery Images</label>
@@ -166,6 +194,9 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <h5 class="mb-3">Specifications</h5>
+                            <button type="button" class="btn btn-sm btn-primary mb-3" id="add-spec">
+                                <i class="ri-add-line"></i> Add Specification
+                            </button>
                         </div>
                         
                         <div class="col-12">
@@ -174,10 +205,10 @@
                                     @foreach($product->specifications as $key => $value)
                                         <div class="row mb-2 specification-row">
                                             <div class="col-md-5">
-                                                <input type="text" class="form-control" name="spec_keys[]" value="{{ $key }}" placeholder="Specification Name (e.g., Brand)">
+                                                <input type="text" class="form-control" name="spec_keys[]" value="{{ old('spec_keys.' . $loop->index, $key) }}" placeholder="Specification Name (e.g., Brand)">
                                             </div>
                                             <div class="col-md-5">
-                                                <input type="text" class="form-control" name="spec_values[]" value="{{ $value }}" placeholder="Value (e.g., Nike)">
+                                                <input type="text" class="form-control" name="spec_values[]" value="{{ old('spec_values.' . $loop->index, $value) }}" placeholder="Value (e.g., Nike)">
                                             </div>
                                             <div class="col-md-2">
                                                 <button type="button" class="btn btn-danger remove-spec"><i class="ri-delete-bin-line"></i></button>
@@ -198,9 +229,6 @@
                                     </div>
                                 @endif
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm mt-2" id="add-spec">
-                                <i class="ri-add-line"></i> Add Specification
-                            </button>
                         </div>
                     </div>
                     
@@ -208,6 +236,9 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <h5 class="mb-3">Additional Information</h5>
+                            <button type="button" class="btn btn-sm btn-primary mb-3" id="add-info">
+                                <i class="ri-add-line"></i> Add Information
+                            </button>
                         </div>
                         
                         <div class="col-12">
@@ -216,10 +247,10 @@
                                     @foreach($product->additional_info as $key => $value)
                                         <div class="row mb-2 info-row">
                                             <div class="col-md-5">
-                                                <input type="text" class="form-control" name="info_keys[]" value="{{ $key }}" placeholder="Field Name (e.g., Warranty)">
+                                                <input type="text" class="form-control" name="info_keys[]" value="{{ old('info_keys.' . $loop->index, $key) }}" placeholder="Field Name (e.g., Warranty)">
                                             </div>
                                             <div class="col-md-5">
-                                                <input type="text" class="form-control" name="info_values[]" value="{{ $value }}" placeholder="Value (e.g., 2 Years)">
+                                                <input type="text" class="form-control" name="info_values[]" value="{{ old('info_values.' . $loop->index, $value) }}" placeholder="Value (e.g., 2 Years)">
                                             </div>
                                             <div class="col-md-2">
                                                 <button type="button" class="btn btn-danger remove-info"><i class="ri-delete-bin-line"></i></button>
@@ -240,14 +271,11 @@
                                     </div>
                                 @endif
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm mt-2" id="add-info">
-                                <i class="ri-add-line"></i> Add Information
-                            </button>
                         </div>
                     </div>
                     
                     {{-- Variations (for variable products) --}}
-                    <div class="row mb-4" id="variations-section" style="{{ $product->product_type == 'variable' ? '' : 'display: none;' }}">
+                    <div class="row mb-4" id="variations-section" style="{{ old('product_type', $product->product_type) == 'variable' ? '' : 'display: none;' }}">
                         <div class="col-12">
                             <h5 class="mb-3">Product Variations</h5>
                             
@@ -261,7 +289,7 @@
                             </div>
                             
                             <div id="variations-container">
-                                @if($product->variations->count() > 0)
+                                @if($product->variations && $product->variations->count() > 0)
                                     @foreach($product->variations as $index => $variation)
                                         <div class="card mb-3 variation-card" data-id="{{ $variation->id }}">
                                             <div class="card-body">
@@ -270,23 +298,23 @@
                                                     
                                                     <div class="col-md-3 mb-2">
                                                         <label class="form-label">SKU</label>
-                                                        <input type="text" class="form-control" name="variations[{{ $index }}][sku]" value="{{ $variation->sku }}">
+                                                        <input type="text" class="form-control" name="variations[{{ $index }}][sku]" value="{{ old('variations.' . $index . '.sku', $variation->sku) }}" required>
                                                     </div>
                                                     <div class="col-md-3 mb-2">
                                                         <label class="form-label">Regular Price</label>
-                                                        <input type="number" step="0.01" class="form-control" name="variations[{{ $index }}][regular_price]" value="{{ $variation->regular_price }}">
+                                                        <input type="number" step="0.01" class="form-control" name="variations[{{ $index }}][regular_price]" value="{{ old('variations.' . $index . '.regular_price', $variation->regular_price) }}" required>
                                                     </div>
                                                     <div class="col-md-3 mb-2">
                                                         <label class="form-label">Sale Price</label>
-                                                        <input type="number" step="0.01" class="form-control" name="variations[{{ $index }}][sale_price]" value="{{ $variation->sale_price }}">
+                                                        <input type="number" step="0.01" class="form-control" name="variations[{{ $index }}][sale_price]" value="{{ old('variations.' . $index . '.sale_price', $variation->sale_price) }}">
                                                     </div>
                                                     <div class="col-md-3 mb-2">
                                                         <label class="form-label">Stock</label>
-                                                        <input type="number" class="form-control" name="variations[{{ $index }}][stock_quantity]" value="{{ $variation->stock_quantity }}">
+                                                        <input type="number" class="form-control" name="variations[{{ $index }}][stock_quantity]" value="{{ old('variations.' . $index . '.stock_quantity', $variation->stock_quantity) }}">
                                                     </div>
                                                     <div class="col-md-6 mb-2">
                                                         <label class="form-label">Attributes (JSON)</label>
-                                                        <input type="text" class="form-control" name="variations[{{ $index }}][attributes]" value='{{ json_encode($variation->attributes) }}'>
+                                                        <input type="text" class="form-control" name="variations[{{ $index }}][attributes]" value='{{ old('variations.' . $index . '.attributes', json_encode($variation->attributes)) }}' required>
                                                     </div>
                                                     <div class="col-md-4 mb-2">
                                                         <label class="form-label">Image</label>
@@ -299,7 +327,7 @@
                                                     </div>
                                                     <div class="col-md-2 mb-2 d-flex align-items-end">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" name="variations[{{ $index }}][is_default]" {{ $variation->is_default ? 'checked' : '' }}>
+                                                            <input class="form-check-input" type="checkbox" name="variations[{{ $index }}][is_default]" {{ old('variations.' . $index . '.is_default', $variation->is_default) ? 'checked' : '' }}>
                                                             <label class="form-check-label">Default</label>
                                                         </div>
                                                     </div>
@@ -336,10 +364,12 @@
 
 @push('css')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
         // Initialize Summernote
@@ -360,6 +390,28 @@
         $('.select2').select2({
             theme: 'bootstrap-5',
             width: '100%'
+        });
+        
+        // Load subcategories based on category selection
+        $('#category_id').change(function() {
+            let categoryId = $(this).val();
+            let subcategorySelect = $('#subcategory_id');
+            
+            subcategorySelect.empty().append('<option value="">Select Subcategory</option>');
+            
+            if (categoryId) {
+                let url = '{{ route("admin.products.get-subcategories",':data-id') }}';
+                    url = url.replace(':data-id', categoryId);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(data) {
+                        $.each(data, function(key, subcategory) {
+                            subcategorySelect.append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+                        });
+                    }
+                });
+            }
         });
         
         // Toggle stock field
@@ -425,13 +477,15 @@
         // Preview featured image
         $('#featured_image').change(function() {
             let file = this.files[0];
-            let reader = new FileReader();
-            
-            reader.onload = function(e) {
-                $('#featured_preview').html('<img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 150px;">');
-            };
-            
-            reader.readAsDataURL(file);
+            if (file) {
+                let reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    $('#featured_preview').html('<img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 150px;">');
+                };
+                
+                reader.readAsDataURL(file);
+            }
         });
         
         // Preview gallery images
@@ -442,7 +496,7 @@
                 let reader = new FileReader();
                 
                 reader.onload = function(e) {
-                    $('#gallery_preview').append('<div class="col-md-3 mb-2"><img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 100px;"></div>');
+                    $('#gallery_preview').append('<div class="col-md-3 mb-2"><img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 100px; width: 100%; object-fit: cover;"></div>');
                 };
                 
                 reader.readAsDataURL(file);
@@ -459,6 +513,8 @@
         });
         
         // Generate variations
+        let variationIndex = {{ $product->variations ? $product->variations->count() : 0 }};
+        
         $('#generate-variations').click(function() {
             let selectedAttributes = $('#attribute-select').val();
             if (!selectedAttributes || selectedAttributes.length === 0) {
@@ -470,45 +526,52 @@
                 return;
             }
             
-            // Get the next index for variations
-            let nextIndex = $('#variations-container .variation-card').length;
+            // Get selected attribute names
+            let attributeNames = [];
+            $('#attribute-select option:selected').each(function() {
+                attributeNames.push($(this).text());
+            });
             
-            // Add a new variation row
+            let attributesJson = {};
+            attributeNames.forEach(function(attr) {
+                attributesJson[attr] = '';
+            });
+            
             let variationHtml = `
                 <div class="card mb-3 variation-card">
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">SKU</label>
-                                <input type="text" class="form-control" name="variations[${nextIndex}][sku]">
+                                <input type="text" class="form-control" name="variations[${variationIndex}][sku]" required>
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Regular Price</label>
-                                <input type="number" step="0.01" class="form-control" name="variations[${nextIndex}][regular_price]">
+                                <input type="number" step="0.01" class="form-control" name="variations[${variationIndex}][regular_price]" required>
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Sale Price</label>
-                                <input type="number" step="0.01" class="form-control" name="variations[${nextIndex}][sale_price]">
+                                <input type="number" step="0.01" class="form-control" name="variations[${variationIndex}][sale_price]">
                             </div>
                             <div class="col-md-3 mb-2">
                                 <label class="form-label">Stock</label>
-                                <input type="number" class="form-control" name="variations[${nextIndex}][stock_quantity]">
+                                <input type="number" class="form-control" name="variations[${variationIndex}][stock_quantity]" value="0">
                             </div>
                             <div class="col-md-6 mb-2">
                                 <label class="form-label">Attributes (JSON)</label>
-                                <input type="text" class="form-control" name="variations[${nextIndex}][attributes]" value='{"Color":"","Size":""}'>
+                                <input type="text" class="form-control" name="variations[${variationIndex}][attributes]" value='${JSON.stringify(attributesJson)}' required>
                             </div>
                             <div class="col-md-6 mb-2">
                                 <label class="form-label">Image</label>
-                                <input type="file" class="form-control" name="variations[${nextIndex}][image]" accept="image/*">
+                                <input type="file" class="form-control" name="variations[${variationIndex}][image]" accept="image/*">
                             </div>
                             <div class="col-md-12">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="variations[${nextIndex}][is_default]">
+                                    <input class="form-check-input" type="checkbox" name="variations[${variationIndex}][is_default]">
                                     <label class="form-check-label">Default Variation</label>
                                 </div>
                             </div>
-                            <div class="col-md-12 text-end">
+                            <div class="col-md-12 text-end mt-2">
                                 <button type="button" class="btn btn-sm btn-danger remove-variation">
                                     <i class="ri-delete-bin-line"></i> Remove
                                 </button>
@@ -519,6 +582,7 @@
             `;
             
             $('#variations-container').append(variationHtml);
+            variationIndex++;
         });
         
         // Remove variation
@@ -528,7 +592,6 @@
             
             if (variationId) {
                 // If it's an existing variation, we need to track it for deletion
-                // You might want to add a hidden input for deleted variations
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "This variation will be deleted!",
@@ -539,6 +602,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // Add to deleted variations array if needed
                         card.remove();
                     }
                 });
@@ -550,6 +614,10 @@
         // Form submission
         $('#productForm').on('submit', function(e) {
             e.preventDefault();
+            
+            // Remove existing validation classes
+            $('.is-invalid').removeClass('is-invalid');
+            $('.invalid-feedback').remove();
             
             let formData = new FormData(this);
             
@@ -571,14 +639,14 @@
                             timer: 1500,
                             showConfirmButton: false
                         }).then(() => {
-                            window.location.href = '{{ route('admin.products.index') }}';
+                            window.location.href = response.redirect || '{{ route('admin.products.index') }}';
                         });
                     }
                 },
                 error: function(xhr) {
                     if (xhr.status === 422) {
                         let errors = xhr.responseJSON.errors;
-                        let errorMessage = '<ul>';
+                        let errorMessage = '<ul class="mb-0">';
                         
                         $.each(errors, function(key, value) {
                             errorMessage += `<li>${value}</li>`;
@@ -586,7 +654,6 @@
                             let errorField = $(`#${key}`);
                             if (errorField.length) {
                                 errorField.addClass('is-invalid');
-                                errorField.siblings('.invalid-feedback').remove();
                                 errorField.after(`<div class="invalid-feedback">${value}</div>`);
                             }
                         });

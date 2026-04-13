@@ -1,0 +1,390 @@
+/* Product Collections Responsive Styles */
+/* Desktop styles remain unchanged */
+
+/* Tablet (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .collection-title {
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+    }
+    
+    .collection-title .d-flex {
+        flex: 1 !important;
+    }
+    
+    .collection-title h5 {
+        font-size: 16px !important;
+        white-space: nowrap !important;
+    }
+    
+    .collection-title p {
+        font-size: 12px !important;
+        padding-left: 10px !important;
+        white-space: nowrap !important;
+    }
+    
+    .collection-title a {
+        font-size: 11px !important;
+        padding: 4px 8px !important;
+    }
+    
+    .product-card {
+        margin-bottom: 15px !important;
+    }
+    
+    .img-sec {
+        height: 160px !important;
+    }
+    
+    .details-section p {
+        font-size: 13px !important;
+        line-height: 16px !important;
+    }
+    
+    .star-sec i {
+        font-size: 11px !important;
+        padding: 1px !important;
+    }
+    
+    .star-sec strong {
+        font-size: 12px !important;
+        padding-left: 8px !important;
+    }
+    
+    .pricing .main-price {
+        font-size: 18px !important;
+        line-height: 18px !important;
+    }
+    
+    .pricing del {
+        font-size: 13px !important;
+        padding-left: 8px !important;
+    }
+    
+    .cartbtn {
+        height: 32px !important;
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+        gap: 40px !important;
+    }
+    
+    .discount-badge {
+        width: 32px !important;
+        height: 20px !important;
+        font-size: 8px !important;
+        padding: 4px 6px !important;
+    }
+}
+
+/* Mobile (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .collection-title {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+    }
+    
+    .collection-title .d-flex {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        width: 100% !important;
+    }
+    
+    .collection-title h5 {
+        font-size: 16px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .collection-title p {
+        font-size: 11px !important;
+        padding-left: 0 !important;
+        margin-top: 2px !important;
+    }
+    
+    .collection-title a {
+        font-size: 11px !important;
+        padding: 5px 12px !important;
+        align-self: flex-start !important;
+    }
+    
+    .product-card {
+        margin-bottom: 12px !important;
+    }
+    
+    .img-sec {
+        height: 140px !important;
+    }
+    
+    .details-section p {
+        font-size: 12px !important;
+        line-height: 15px !important;
+    }
+    
+    .star-sec i {
+        font-size: 10px !important;
+        padding: 1px !important;
+    }
+    
+    .star-sec strong {
+        font-size: 11px !important;
+        padding-left: 6px !important;
+    }
+    
+    .pricing .main-price {
+        font-size: 16px !important;
+        line-height: 16px !important;
+    }
+    
+    .pricing del {
+        font-size: 12px !important;
+        padding-left: 6px !important;
+    }
+    
+    .cartbtn {
+        height: 30px !important;
+        font-size: 10px !important;
+        padding: 5px 8px !important;
+        gap: 30px !important;
+    }
+    
+    .discount-badge {
+        width: 30px !important;
+        height: 18px !important;
+        font-size: 7px !important;
+        padding: 3px 5px !important;
+    }
+}
+
+/* Small Mobile (up to 575px) */
+@media (max-width: 575px) {
+    .product-collections-wrapper {
+        padding: 0 5px !important;
+    }
+    
+    .collection-title {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 8px !important;
+        margin: 15px 0 !important;
+    }
+    
+    .collection-title .d-flex {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        width: 100% !important;
+    }
+    
+    .collection-title h5 {
+        font-size: 15px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .collection-title p {
+        font-size: 10px !important;
+        padding-left: 0 !important;
+        margin-top: 2px !important;
+        line-height: 1.3 !important;
+    }
+    
+    .collection-title a {
+        font-size: 10px !important;
+        padding: 4px 10px !important;
+        align-self: flex-start !important;
+    }
+    
+    .product-card {
+        margin-bottom: 10px !important;
+        padding: 8px !important;
+    }
+    
+    .img-sec {
+        height: 120px !important;
+    }
+    
+    .img-sec img {
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    .details-section {
+        padding: 5px 0 !important;
+    }
+    
+    .details-section p {
+        font-size: 11px !important;
+        line-height: 14px !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .star-sec {
+        flex-wrap: wrap !important;
+        gap: 2px !important;
+    }
+    
+    .star-sec i {
+        font-size: 9px !important;
+        padding: 1px !important;
+    }
+    
+    .star-sec strong {
+        font-size: 10px !important;
+        padding-left: 4px !important;
+    }
+    
+    .pricing {
+        flex-wrap: wrap !important;
+        gap: 4px !important;
+    }
+    
+    .pricing .main-price {
+        font-size: 14px !important;
+        line-height: 14px !important;
+    }
+    
+    .pricing del {
+        font-size: 11px !important;
+        padding-left: 4px !important;
+    }
+    
+    .cartbtn {
+        height: 28px !important;
+        font-size: 9px !important;
+        padding: 4px 6px !important;
+        letter-spacing: -0.2px !important;
+    }
+    
+    .discount-badge {
+        width: 28px !important;
+        height: 16px !important;
+        font-size: 6px !important;
+        padding: 2px 4px !important;
+        top: 5px !important;
+        left: 5px !important;
+    }
+}
+
+/* Extra Small Mobile (up to 380px) */
+@media (max-width: 380px) {
+    .product-card {
+        padding: 6px !important;
+    }
+    
+    .img-sec {
+        height: 100px !important;
+    }
+    
+    .details-section p {
+        font-size: 10px !important;
+        line-height: 12px !important;
+    }
+    
+    .star-sec i {
+        font-size: 8px !important;
+    }
+    
+    .star-sec strong {
+        font-size: 9px !important;
+    }
+    
+    .pricing .main-price {
+        font-size: 12px !important;
+    }
+    
+    .pricing del {
+        font-size: 10px !important;
+    }
+    
+    .cartbtn {
+        height: 26px !important;
+        font-size: 8px !important;
+        padding: 6px 5px !important;
+    }
+    
+    .discount-badge {
+        width: 25px !important;
+        height: 14px !important;
+        font-size: 5px !important;
+        padding: 2px 3px !important;
+    }
+}
+
+/* Grid gap adjustments for all screen sizes */
+@media (max-width: 767px) {
+    .row {
+        --bs-gutter-x: 0.75rem !important;
+    }
+}
+
+@media (max-width: 575px) {
+    .row {
+        --bs-gutter-x: 0.5rem !important;
+    }
+}
+
+/* Fix for product card hover effect on mobile */
+@media (max-width: 767px) {
+    .product-card {
+        transition: transform 0.2s ease !important;
+    }
+    
+    .product-card:active {
+        transform: scale(0.98) !important;
+    }
+    .product-card{
+        max-width: 160px;
+    }
+}
+
+/* Landscape mode for mobile */
+@media (max-width: 767px) and (orientation: landscape) {
+    .product-card {
+        margin-bottom: 8px !important;
+    }
+    
+    .img-sec {
+        height: 110px !important;
+    }
+    
+    .collection-title {
+        margin: 10px 0 !important;
+    }
+    
+    .collection-title h5 {
+        font-size: 14px !important;
+    }
+    
+    .collection-title p {
+        font-size: 10px !important;
+    }
+}
+
+/* Tablet landscape optimization */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .product-card {
+        margin-bottom: 20px !important;
+    }
+    
+    .img-sec {
+        height: 180px !important;
+    }
+}
+
+/* Ensure consistent spacing between rows */
+.product-cards {
+    margin-bottom: 10px !important;
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 767px) {
+    .cartbtn,
+    .collection-title a {
+        cursor: pointer !important;
+        -webkit-tap-highlight-color: transparent !important;
+    }
+    
+    .collection-title a:active,
+    .cartbtn:active {
+        opacity: 0.8 !important;
+    }
+}

@@ -1,26 +1,28 @@
 <?php
-
+// database/migrations/2026_03_31_000001_create_categories_table.php
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateCategoriesTable extends Migration
 {
-    public function up(): void
+    public function up()
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('slug')->unique();
+            $table->text('description')->nullable();
             $table->string('image')->nullable();
-            $table->timestamps();
+            $table->integer('order')->default(0);
+            $table->boolean('status')->default(true);
             $table->softDeletes();
-
+            $table->timestamps();
         });
     }
 
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('categories');
     }
-};
+}

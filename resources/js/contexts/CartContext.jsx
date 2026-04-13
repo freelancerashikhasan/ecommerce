@@ -90,13 +90,14 @@ export const CartProvider = ({ children }) => {
 
                 return updatedItems;
             } else {
-                console.log(product);
                 // Add new item
                 const newItem = {
                     id: product.id,
                     name: product.name,
-                    price: product.price,
-                    image: product.image,
+                    price: product.price || product.sale_price,
+                    image: (product.image || product.featured_image)?.startsWith('/storage')
+                    ? (product.image || product.featured_image)
+                    : '/storage/' + (product.image || product.featured_image),
                     quantity: quantity,
                     maxQuantity: product.stock_quantity || 10
                 };
@@ -162,6 +163,14 @@ export const CartProvider = ({ children }) => {
     const hasItems = () => {
         return cartItems.length > 0;
     };
+    const checkout = (orderData) => {
+        router.post('/guest-checkout', orderData, {
+            onSuccess: () => {
+                clearCart();
+                setShowCartModal(false);
+            }
+        });
+    };
 
     const value = {
         cartItems,
@@ -175,7 +184,8 @@ export const CartProvider = ({ children }) => {
         showCartModal,
         setShowCartModal,
         lastAddedItem,
-        setLastAddedItem
+        setLastAddedItem,
+        checkout
     };
 
     return (

@@ -8,7 +8,7 @@
   position: relative;
   height: 480px;
   z-index: 100;
-  margin-top: -81px;
+  margin-top: -66px;
 }
 
 .category-menu {
@@ -20,6 +20,7 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  min-width: 300px;
 }
 
 .category-scroll-container {

@@ -38,11 +38,29 @@
                             <textarea class="form-control" id="description" name="description" rows="5"></textarea>
                         </div>
                         
-                        <div class="col-md-6 mb-3">
-                            <label for="categories" class="form-label">Categories</label>
-                            <select class="form-select select2" id="categories" name="categories[]" multiple>
+                        <div class="col-md-4 mb-3">
+                            <label for="category_id" class="form-label">Category <span class="text-danger">*</span></label>
+                            <select class="form-select" id="category_id" name="category_id" required>
+                                <option value="">Select Category</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="subcategory_id" class="form-label">Subcategory</label>
+                            <select class="form-select" id="subcategory_id" name="subcategory_id">
+                                <option value="">Select Subcategory</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="collection_id" class="form-label">Collection</label>
+                            <select class="form-select" id="collection_id" name="collection_id">
+                                <option value="">Select Collection</option>
+                                @foreach($collections as $collection)
+                                    <option value="{{ $collection->id }}">{{ $collection->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -70,6 +88,7 @@
                         <div class="col-md-4 mb-3">
                             <label for="sale_price" class="form-label">Sale Price</label>
                             <input type="number" step="0.01" class="form-control" id="sale_price" name="sale_price">
+                            <small class="text-muted">Must be less than regular price</small>
                         </div>
                         
                         <div class="col-md-4 mb-3">
@@ -88,7 +107,7 @@
                         
                         <div class="col-md-4 mb-3 stock-field" style="display: none;">
                             <label for="stock_quantity" class="form-label">Stock Quantity</label>
-                            <input type="number" class="form-control" id="stock_quantity" name="stock_quantity">
+                            <input type="number" class="form-control" id="stock_quantity" name="stock_quantity" value="0">
                         </div>
                         
                         <div class="col-md-4 mb-3">
@@ -138,6 +157,9 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <h5 class="mb-3">Specifications</h5>
+                            <button type="button" class="btn btn-sm btn-primary mb-3" id="add-spec">
+                                <i class="ri-add-line"></i> Add Specification
+                            </button>
                         </div>
                         
                         <div class="col-12">
@@ -154,9 +176,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm mt-2" id="add-spec">
-                                <i class="ri-add-line"></i> Add Specification
-                            </button>
                         </div>
                     </div>
                     
@@ -164,6 +183,9 @@
                     <div class="row mb-4">
                         <div class="col-12">
                             <h5 class="mb-3">Additional Information</h5>
+                            <button type="button" class="btn btn-sm btn-primary mb-3" id="add-info">
+                                <i class="ri-add-line"></i> Add Information
+                            </button>
                         </div>
                         
                         <div class="col-12">
@@ -180,9 +202,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-primary btn-sm mt-2" id="add-info">
-                                <i class="ri-add-line"></i> Add Information
-                            </button>
                         </div>
                     </div>
                     
@@ -223,220 +242,256 @@
 
 @push('css')
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-    $(document).ready(function() {
-        // Initialize Summernote
-        $('#description').summernote({
-            height: 200,
-            toolbar: [
-                ['style', ['style']],
-                ['font', ['bold', 'underline', 'clear']],
-                ['color', ['color']],
-                ['para', ['ul', 'ol', 'paragraph']],
-                ['table', ['table']],
-                ['insert', ['link', 'picture']],
-                ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        });
+$(document).ready(function() {
+    // Initialize Summernote
+    $('#description').summernote({
+        height: 200,
+        toolbar: [
+            ['style', ['style']],
+            ['font', ['bold', 'underline', 'clear']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['table', ['table']],
+            ['insert', ['link', 'picture']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+    
+    // Initialize Select2
+    $('.select2').select2({
+        theme: 'bootstrap-5',
+        width: '100%'
+    });
+    
+    // Load subcategories based on category selection
+    $('#category_id').change(function() {
+        let categoryId = $(this).val();
+        let subcategorySelect = $('#subcategory_id');
         
-        // Initialize Select2
-        $('.select2').select2({
-            theme: 'bootstrap-5',
-            width: '100%'
-        });
+        subcategorySelect.empty().append('<option value="">Select Subcategory</option>');
         
-        // Toggle stock field
-        $('#manage_stock').change(function() {
-            $('.stock-field').toggle(this.checked);
-        });
-        
-        // Toggle variations section based on product type
-        $('#product_type').change(function() {
-            if ($(this).val() === 'variable') {
-                $('#variations-section').show();
-            } else {
-                $('#variations-section').hide();
-            }
-        });
-        
-        // Add specification row
-        $('#add-spec').click(function() {
-            let html = `
-                <div class="row mb-2 specification-row">
-                    <div class="col-md-5">
-                        <input type="text" class="form-control" name="spec_keys[]" placeholder="Specification Name">
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" class="form-control" name="spec_values[]" placeholder="Value">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger remove-spec"><i class="ri-delete-bin-line"></i></button>
-                    </div>
+        if (categoryId) {
+               let url = '{{ route("admin.products.get-subcategories",':data-id') }}';
+                    url = url.replace(':data-id', id);
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(data) {
+                    $.each(data, function(key, subcategory) {
+                        subcategorySelect.append('<option value="' + subcategory.id + '">' + subcategory.name + '</option>');
+                    });
+                }
+            });
+        }
+    });
+    
+    // Toggle stock field
+    $('#manage_stock').change(function() {
+        $('.stock-field').toggle(this.checked);
+    });
+    
+    // Toggle variations section based on product type
+    $('#product_type').change(function() {
+        if ($(this).val() === 'variable') {
+            $('#variations-section').slideDown();
+        } else {
+            $('#variations-section').slideUp();
+        }
+    });
+    
+    // Add specification row
+    $('#add-spec').click(function() {
+        let html = `
+            <div class="row mb-2 specification-row">
+                <div class="col-md-5">
+                    <input type="text" class="form-control" name="spec_keys[]" placeholder="Specification Name">
                 </div>
-            `;
-            $('#specifications-container').append(html);
-        });
-        
-        // Remove specification row
-        $(document).on('click', '.remove-spec', function() {
-            $(this).closest('.specification-row').remove();
-        });
-        
-        // Add info row
-        $('#add-info').click(function() {
-            let html = `
-                <div class="row mb-2 info-row">
-                    <div class="col-md-5">
-                        <input type="text" class="form-control" name="info_keys[]" placeholder="Field Name">
-                    </div>
-                    <div class="col-md-5">
-                        <input type="text" class="form-control" name="info_values[]" placeholder="Value">
-                    </div>
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-danger remove-info"><i class="ri-delete-bin-line"></i></button>
-                    </div>
+                <div class="col-md-5">
+                    <input type="text" class="form-control" name="spec_values[]" placeholder="Value">
                 </div>
-            `;
-            $('#info-container').append(html);
-        });
-        
-        // Remove info row
-        $(document).on('click', '.remove-info', function() {
-            $(this).closest('.info-row').remove();
-        });
-        
-        // Preview featured image
-        $('#featured_image').change(function() {
-            let file = this.files[0];
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-spec"><i class="ri-delete-bin-line"></i></button>
+                </div>
+            </div>
+        `;
+        $('#specifications-container').append(html);
+    });
+    
+    // Remove specification row
+    $(document).on('click', '.remove-spec', function() {
+        $(this).closest('.specification-row').remove();
+    });
+    
+    // Add info row
+    $('#add-info').click(function() {
+        let html = `
+            <div class="row mb-2 info-row">
+                <div class="col-md-5">
+                    <input type="text" class="form-control" name="info_keys[]" placeholder="Field Name">
+                </div>
+                <div class="col-md-5">
+                    <input type="text" class="form-control" name="info_values[]" placeholder="Value">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-danger remove-info"><i class="ri-delete-bin-line"></i></button>
+                </div>
+            </div>
+        `;
+        $('#info-container').append(html);
+    });
+    
+    // Remove info row
+    $(document).on('click', '.remove-info', function() {
+        $(this).closest('.info-row').remove();
+    });
+    
+    // Preview featured image
+    $('#featured_image').change(function() {
+        let file = this.files[0];
+        if (file) {
             let reader = new FileReader();
-            
             reader.onload = function(e) {
                 $('#featured_preview').html('<img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 150px;">');
             };
-            
+            reader.readAsDataURL(file);
+        }
+    });
+    
+    // Preview gallery images
+    $('#images').change(function() {
+        $('#gallery_preview').empty();
+        $.each(this.files, function(index, file) {
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                $('#gallery_preview').append('<div class="col-md-3 mb-2"><img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 100px; width: 100%; object-fit: cover;"></div>');
+            };
             reader.readAsDataURL(file);
         });
-        
-        // Preview gallery images
-        $('#images').change(function() {
-            $('#gallery_preview').empty();
-            
-            $.each(this.files, function(index, file) {
-                let reader = new FileReader();
-                
-                reader.onload = function(e) {
-                    $('#gallery_preview').append('<div class="col-md-3 mb-2"><img src="' + e.target.result + '" class="img-thumbnail" style="max-height: 100px;"></div>');
-                };
-                
-                reader.readAsDataURL(file);
+    });
+    
+    // Generate variations
+    let variationIndex = 0;
+    $('#generate-variations').click(function() {
+        let selectedAttributes = $('#attribute-select').val();
+        if (!selectedAttributes || selectedAttributes.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Warning!',
+                text: 'Please select at least one attribute!'
             });
+            return;
+        }
+        
+        // Get selected attribute names
+        let attributeNames = [];
+        $('#attribute-select option:selected').each(function() {
+            attributeNames.push($(this).text());
         });
         
-        // Generate variations
-        $('#generate-variations').click(function() {
-            let selectedAttributes = $('#attribute-select').val();
-            if (!selectedAttributes || selectedAttributes.length === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Warning!',
-                    text: 'Please select at least one attribute!'
-                });
-                return;
-            }
-            
-            // Get attribute values (you'd typically fetch these via AJAX)
-            // For now, we'll use a prompt
-            let variations = [];
-            
-            // Clear existing variations
-            $('#variations-container').empty();
-            
-            // Add a sample variation row
-            let variationHtml = `
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">SKU</label>
-                                <input type="text" class="form-control" name="variations[0][sku]">
+        let attributesJson = {};
+        attributeNames.forEach(function(attr) {
+            attributesJson[attr] = '';
+        });
+        
+        let variationHtml = `
+            <div class="card mb-3 variation-card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label">SKU</label>
+                            <input type="text" class="form-control" name="variations[${variationIndex}][sku]" required>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label">Regular Price</label>
+                            <input type="number" step="0.01" class="form-control" name="variations[${variationIndex}][regular_price]" required>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label">Sale Price</label>
+                            <input type="number" step="0.01" class="form-control" name="variations[${variationIndex}][sale_price]">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label">Stock</label>
+                            <input type="number" class="form-control" name="variations[${variationIndex}][stock_quantity]" value="0">
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Attributes (JSON)</label>
+                            <input type="text" class="form-control" name="variations[${variationIndex}][attributes]" value='${JSON.stringify(attributesJson)}' required>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Image</label>
+                            <input type="file" class="form-control" name="variations[${variationIndex}][image]" accept="image/*">
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="variations[${variationIndex}][is_default]">
+                                <label class="form-check-label">Default Variation</label>
                             </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Regular Price</label>
-                                <input type="number" step="0.01" class="form-control" name="variations[0][regular_price]">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Sale Price</label>
-                                <input type="number" step="0.01" class="form-control" name="variations[0][sale_price]">
-                            </div>
-                            <div class="col-md-3 mb-2">
-                                <label class="form-label">Stock</label>
-                                <input type="number" class="form-control" name="variations[0][stock_quantity]">
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">Attributes (JSON)</label>
-                                <input type="text" class="form-control" name="variations[0][attributes]" value='{"Color":"Red","Size":"XL"}'>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                                <label class="form-label">Image</label>
-                                <input type="file" class="form-control" name="variations[0][image]">
-                            </div>
-                            <div class="col-md-12">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="variations[0][is_default]">
-                                    <label class="form-check-label">Default Variation</label>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="col-md-12 text-end mt-2">
+                            <button type="button" class="btn btn-sm btn-danger remove-variation">
+                                <i class="ri-delete-bin-line"></i> Remove
+                            </button>
                         </div>
                     </div>
                 </div>
-            `;
-            
-            $('#variations-container').append(variationHtml);
-        });
+            </div>
+        `;
         
-        // Form submission
-        $('#productForm').on('submit', function(e) {
-            e.preventDefault();
-            
-            let formData = new FormData(this);
-            
-            // Get Summernote content
-            formData.set('description', $('#description').summernote('code'));
-            
-            $.ajax({
-                url: $(this).attr('action'),
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(response) {
-                    if (response.success) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success!',
-                            text: response.message,
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => {
-                            window.location.href = '{{ route('admin.products.index') }}';
-                        });
-                    }
-                },
-                error: function(xhr) {
+        $('#variations-container').append(variationHtml);
+        variationIndex++;
+    });
+    
+    // Remove variation
+    $(document).on('click', '.remove-variation', function() {
+        $(this).closest('.variation-card').remove();
+    });
+    
+    // Form submission
+    $('#productForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        $('.is-invalid').removeClass('is-invalid');
+        $('.invalid-feedback').remove();
+        
+        let formData = new FormData(this);
+        formData.set('description', $('#description').summernote('code'));
+        
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                if (response.success) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success!',
+                        text: response.message,
+                        timer: 1500,
+                        showConfirmButton: false
+                    }).then(() => {
+                        window.location.href = response.redirect;
+                    });
+                }
+            },
+            error: function(xhr) {
+                if (xhr.status === 422) {
                     let errors = xhr.responseJSON.errors;
-                    let errorMessage = '<ul>';
+                    let errorMessage = '<ul class="mb-0">';
                     
                     $.each(errors, function(key, value) {
                         errorMessage += `<li>${value}</li>`;
-                        
                         let errorField = $(`#${key}`);
                         if (errorField.length) {
                             errorField.addClass('is-invalid');
-                            errorField.siblings('.invalid-feedback').remove();
                             errorField.after(`<div class="invalid-feedback">${value}</div>`);
                         }
                     });
@@ -448,9 +503,16 @@
                         title: 'Validation Error!',
                         html: errorMessage
                     });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: xhr.responseJSON.message || 'Something went wrong!'
+                    });
                 }
-            });
+            }
         });
     });
+});
 </script>
 @endpush

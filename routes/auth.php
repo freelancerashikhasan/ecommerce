@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\User\DashboardController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Auth\PhoneAuthController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +36,13 @@ Route::middleware('guest')->group(function () {
 
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
+
+        Route::post('/send-otp', [PhoneAuthController::class, 'sendOtp'])->name('send.otp');
+    Route::post('/verify-otp', [PhoneAuthController::class, 'verifyOtp'])->name('verify.otp');
+
+    // Google Login
+    Route::get('/auth/google/redirect', [GoogleAuthController::class, 'redirectToGoogle'])->name('google.redirect');
+    Route::get('/auth/google/callback', [GoogleAuthController::class, 'handleGoogleCallback'])->name('google.callback');
 });
 
 Route::middleware('auth')->group(function () {
@@ -46,6 +56,7 @@ Route::middleware('auth')->group(function () {
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
+
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');

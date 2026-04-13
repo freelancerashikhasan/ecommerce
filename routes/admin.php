@@ -3,14 +3,20 @@
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\Auth\RegisterController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ChangePasswordController;
+use App\Http\Controllers\Admin\CollectionController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FeatureCardController;
 use App\Http\Controllers\Admin\FeaturedProductController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ReceiveCategoryController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\PromotionController;
+use App\Http\Controllers\Admin\SubcategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -102,7 +108,52 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/update/{id}', [FeaturedProductController::class, 'update'])->name('update')->middleware(['permission:access-all|featured-edit']);
             Route::get('/delete/{id}', [FeaturedProductController::class, 'destroy'])->name('destroy')->middleware(['permission:access-all|featured-delete']);
         });
+        // Orders Routes
+        Route::prefix('orders')->name('orders.')->group(function () {
+            Route::get('/', [OrderController::class, 'index'])->name('index');
+            Route::get('/create', [OrderController::class, 'create'])->name('create');
+            Route::post('/', [OrderController::class, 'store'])->name('store');
+            Route::get('/{id}', [OrderController::class, 'show'])->name('show');
+            Route::get('/{id}/edit', [OrderController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [OrderController::class, 'update'])->name('update');
+            Route::delete('/{id}', [OrderController::class, 'destroy'])->name('destroy');
+            Route::post('/{id}/update-status', [OrderController::class, 'updateStatus'])->name('update-status');
+            Route::post('/{id}/add-conversation', [OrderController::class, 'addConversation'])->name('add-conversation');
+            Route::post('/{id}/assign-courier', [OrderController::class, 'assignCourier'])->name('assign-courier');
+            Route::get('/{id}/invoice', [OrderController::class, 'generateInvoice'])->name('invoice');
+            Route::get('/{id}/sticker', [OrderController::class, 'generateSticker'])->name('sticker');
 
+             Route::post('/{id}/assign-courier', [OrderController::class, 'assignCourier'])->name('assign-courier');
+            Route::get('/{id}/track', [OrderController::class, 'trackOrder'])->name('track');
+            Route::post('/{id}/cancel-courier', [OrderController::class, 'cancelCourier'])->name('cancel-courier');
+            Route::get('/{id}/sticker', [OrderController::class, 'generateSticker'])->name('sticker');
+            Route::post('/courier/pricing', [OrderController::class, 'getCourierPricing'])->name('courier-pricing');
+            Route::post('/courier/bulk-assign', [OrderController::class, 'bulkAssignCourier'])->name('bulk-assign-courier');
+            Route::get('/courier/services', [OrderController::class, 'getCourierServices'])->name('courier-services');
+        });
+
+
+        Route::resource('feature-cards', FeatureCardController::class)->except(['show']);
+
+        // Promotions Routes
+        Route::resource('promotions', PromotionController::class);
+
+        Route::resource('categories', CategoryController::class);
+        Route::post('categories/{id}/toggle-status', [CategoryController::class, 'toggleStatus'])->name('categories.toggle-status');
+        
+        // Subcategories
+        Route::resource('subcategories', SubcategoryController::class);
+        Route::post('subcategories/{id}/toggle-status', [SubcategoryController::class, 'toggleStatus'])->name('subcategories.toggle-status');
+        Route::get('subcategories/get-by-category/{categoryId}', [SubcategoryController::class, 'getByCategory'])->name('subcategories.get-by-category');
+        
+        // Collections (renamed from product_categories)
+        Route::resource('collections', CollectionController::class);
+        Route::post('collections/{id}/toggle-status', [CollectionController::class, 'toggleStatus'])->name('collections.toggle-status');
+        
+        Route::post('products/{id}/toggle-status', [ProductController::class, 'toggleStatus'])->name('products.toggle-status');
+        Route::get('products/get-subcategories/{categoryId}', [ProductController::class, 'getSubcategories'])->name('products.get-subcategories');
+        
+   
     });
 
 });

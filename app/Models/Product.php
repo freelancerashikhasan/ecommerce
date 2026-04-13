@@ -13,11 +13,12 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
     
+
     protected $fillable = [
-        'name', 'slug', 'short_description', 'description', 'video_link',
-        'sku', 'regular_price', 'sale_price', 'purchase_price',
-        'stock_quantity', 'manage_stock', 'in_stock', 'featured_image',
-        'product_type', 'specifications', 'additional_info', 'status'
+        'name', 'slug', 'short_description', 'description', 'video_link', 'sku',
+        'regular_price', 'sale_price', 'purchase_price', 'stock_quantity',
+        'manage_stock', 'in_stock', 'featured_image', 'product_type',
+        'specifications', 'additional_info', 'status', 'category_id', 'subcategory_id', 'collection_id'
     ];
 
     protected $casts = [
@@ -28,9 +29,23 @@ class Product extends Model
         'status' => 'boolean',
         'regular_price' => 'decimal:2',
         'sale_price' => 'decimal:2',
-        'purchase_price' => 'decimal:2'
+        'purchase_price' => 'decimal:2',
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function subcategory()
+    {
+        return $this->belongsTo(Subcategory::class);
+    }
+
+  public function collection()
+    {
+        return $this->belongsTo(Collection::class);
+    }
     protected static function boot()
     {
         parent::boot();
@@ -49,8 +64,9 @@ class Product extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(ProductCategory::class, 'category_product');
+        return $this->belongsToMany(Category::class, 'category_product');
     }
+   
 
     public function variations(): HasMany
     {

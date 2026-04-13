@@ -11,6 +11,7 @@ import { createInertiaApp } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { CartProvider } from './contexts/CartContext';
 import CartModal from './components/CartModal';
+import { AuthProvider } from './contexts/AuthContext';
 
 // If you have other providers, import them here
 // import { LanguageProvider } from './contexts/LanguageContext';
@@ -25,10 +26,12 @@ createInertiaApp({
         {/* Order of providers matters - wrap from most general to most specific */}
         {/* <LanguageProvider> */}
         {/*   <LoadingProvider> */}
+        <AuthProvider initialUser={props.initialPage.props.auth?.user || null}>
             <CartProvider>
               <App {...props} />
               <CartModal />
             </CartProvider>
+          </AuthProvider>
         {/*   </LoadingProvider> */}
         {/* </LanguageProvider> */}
       </React.StrictMode>

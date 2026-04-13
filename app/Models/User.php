@@ -1,53 +1,99 @@
 <?php
+// app/Models/User.php
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
-    protected $guard = 'web';
-    protected $guard_name = 'web'; // Specify the guard name
+    use HasFactory, Notifiable;
+    protected $guard_name = 'web';
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'phone',
+        'google_id',
+        'avatar',
+        'phone_verified_at',
+        'email_verified_at',
     ];
 
     /**
      * The attributes that should be hidden for serialization.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $hidden = [
         'password',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
         'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'phone_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+    
+    /**
+     * Check if phone is verified
+     */
+    public function isPhoneVerified()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'two_factor_confirmed_at' => 'datetime',
-        ];
+        return !is_null($this->phone_verified_at);
+    }
+    
+    /**
+     * Check if email is verified
+     */
+    public function isEmailVerified()
+    {
+        return !is_null($this->email_verified_at);
+    }
+
+      public function orders()
+    {
+        return Order::where('customer_phone', $this->phone)->orderBy('created_at', 'desc');
+    }
+     public function wishlist()
+    {
+        return $this->belongsToMany(Product::class, 'wishlists')->withTimestamps();
+    }
+
+    /**
+     * Get user by phone number
+     */
+    public static function findByPhone($phone)
+    {
+        return self::where('phone', $phone)->first();
+    }
+   
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+
+    public function defaultAddress()
+    {
+        return $this->hasOne(Address::class)->where('is_default', true);
     }
 }
